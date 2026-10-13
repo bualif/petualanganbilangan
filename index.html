@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Bilangan — Literasi Numerasi Kelas 4</title>
+<style>
+:root{
+  --bg:#08152f;--panel:#10244a;--panel2:#16315f;--text:#f6f8ff;
+  --muted:#b9c7e6;--accent:#ffd447;--green:#55df9a;--blue:#55b8ff;
+  --red:#ff7188;--orange:#ffad5c;--shadow:0 18px 45px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+background:radial-gradient(circle at 20% 10%,#173b73 0,transparent 30%),
+radial-gradient(circle at 90% 90%,#24356b 0,transparent 28%),var(--bg);color:var(--text)}
+button,input,textarea{font:inherit}button{cursor:pointer;border:0}
+.app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{min-height:72px;padding:12px 4vw;display:flex;align-items:center;justify-content:space-between;
+gap:14px;background:rgba(5,14,35,.88);backdrop-filter:blur(12px);position:sticky;top:0;z-index:20;
+border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{font-weight:900;letter-spacing:.4px;font-size:1.08rem}.logo span{color:var(--accent)}
+.stats{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pill{padding:8px 12px;border-radius:999px;background:var(--panel2);font-weight:800;font-size:.9rem}
+.pill b{color:var(--accent)}
+main{width:min(1100px,92vw);margin:0 auto;padding:24px 0 55px;flex:1}
+.screen{display:none;animation:rise .3s ease}.screen.active{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{background:linear-gradient(145deg,rgba(22,49,95,.97),rgba(10,29,63,.97));
+border:1px solid rgba(255,255,255,.1);border-radius:28px;padding:30px;box-shadow:var(--shadow)}
+.hero{min-height:calc(100vh - 140px);display:grid;place-items:center;text-align:center}
+.hero .card{max-width:900px;padding:42px 36px}
+h1{font-size:clamp(2.2rem,6vw,4.4rem);line-height:1;margin:12px 0}
+h2{font-size:clamp(1.7rem,4vw,2.7rem);margin:0 0 10px}h3{margin-top:0}
+.lead{font-size:1.08rem;color:var(--muted);line-height:1.65}
+.btn{padding:13px 20px;border-radius:15px;font-weight:900;color:#10203d;background:var(--accent);
+box-shadow:0 6px 0 #c69f18;transition:.15s;display:inline-block}
+.btn:hover{transform:translateY(-2px)}.btn:active{transform:translateY(3px);box-shadow:0 3px 0 #c69f18}
+.btn.secondary{background:var(--blue);box-shadow:0 6px 0 #2478b8}.btn.ghost{background:#243b6d;color:#fff;box-shadow:none}
+.btn.green{background:var(--green);box-shadow:0 6px 0 #23966a}.btn.danger{background:var(--red);box-shadow:0 6px 0 #b64359}
+.actions{display:flex;flex-wrap:wrap;gap:11px;justify-content:center;margin-top:22px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:17px}.grid.three{grid-template-columns:repeat(3,1fr)}
+.content{font-size:1.03rem;line-height:1.7;color:#e5ebff}.content li{margin:8px 0}
+.formula{font-size:clamp(1.35rem,3.5vw,2.2rem);font-weight:950;text-align:center;padding:20px;border-radius:20px;background:#071a3a;margin:18px 0;color:var(--accent)}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#203c70;color:#fff;font-weight:800;font-size:.85rem}
+.notice{padding:15px 17px;border-radius:17px;background:rgba(85,184,255,.1);border:1px solid rgba(85,184,255,.25);color:#dcecff}
+.warning{padding:15px 17px;border-radius:17px;background:rgba(255,212,71,.09);border:1px solid rgba(255,212,71,.22)}
+.role-card{background:#0b1d40;border-radius:20px;padding:20px;text-align:center;border:1px solid rgba(255,255,255,.07)}
+.role-icon{font-size:3rem}
+.island-map{min-height:220px;position:relative;border-radius:24px;overflow:hidden;margin-bottom:20px;
+background:radial-gradient(circle at 20% 30%,#6bc7a0 0 7%,transparent 8%),
+radial-gradient(circle at 72% 68%,#6bc7a0 0 10%,transparent 11%),
+linear-gradient(145deg,#277a91,#174e72 55%,#0d385d)}
+.island{position:absolute;border-radius:48% 52% 45% 55%;background:#79d28f;box-shadow:inset -8px -10px 0 rgba(31,117,79,.22),0 8px 0 rgba(5,37,62,.25)}
+.i1{width:140px;height:80px;left:8%;top:25%;transform:rotate(-12deg)}
+.i2{width:160px;height:90px;right:8%;top:35%;transform:rotate(8deg)}
+.i3{width:100px;height:60px;left:43%;top:12%;transform:rotate(15deg)}
+.palm{position:absolute;font-size:2rem}.p1{left:14%;top:18%}.p2{right:15%;top:30%}.p3{left:48%;top:4%}
+.map-path{position:absolute;left:22%;top:48%;width:58%;height:35%;border:4px dashed rgba(255,244,178,.7);
+border-left-color:transparent;border-radius:50%;transform:rotate(-8deg)}
+.avatar{position:absolute;left:47%;top:35%;font-size:3rem;z-index:3;animation:heroHop 2.8s ease-in-out infinite}
+@keyframes heroHop{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px) rotate(-3deg)}}
+.coin,.star{position:absolute;font-size:1.5rem;animation:float 3.2s ease-in-out infinite}.coin{animation-delay:.4s}.star{animation-delay:1.2s}
+.c1{left:28%;top:20%}.c2{right:30%;top:22%}.c3{left:75%;bottom:12%}.s1{left:34%;bottom:15%}.s2{right:12%;top:10%}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-10px) rotate(8deg)}}
+.receipt{background:#fff;color:#18233b;border-radius:10px;padding:20px;max-width:360px;margin:18px auto;
+box-shadow:0 12px 25px rgba(0,0,0,.2);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.receipt h3{text-align:center;margin:0 0 12px}.receipt .row{display:flex;justify-content:space-between;padding:5px 0}
+.receipt .total{border-top:2px dashed #65718b;margin-top:8px;padding-top:10px;font-weight:950;font-size:1.1rem}
+.torn{display:inline-block;background:#dfe5ef;padding:4px 8px;border-radius:4px;color:#647087}
+.stepper{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:20px 0}
+.step{padding:10px;border-radius:14px;background:#0b1d40;text-align:center;font-weight:900;border:1px solid rgba(255,255,255,.06)}
+.step.active{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+.cash-board{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.cash-slot{min-height:125px;padding:14px;border-radius:18px;background:#071a3a;border:2px dashed #37558b;text-align:center}
+.cash-slot strong{display:block;color:var(--accent);font-size:1.05rem}.cash-value{font-size:2rem;font-weight:950;margin-top:9px}
+.cash-card{padding:13px;border-radius:15px;background:#203c70;font-weight:950;text-align:center;transition:.15s}
+.cash-card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.drag-area{display:grid;grid-template-columns:1fr 1.2fr;gap:16px;margin-top:18px}
+.drag-pieces,.drop-targets{background:#071a3a;border-radius:20px;padding:18px}
+.drag-pieces h3,.drop-targets h3{margin-bottom:12px}
+.draggable{display:inline-block;padding:12px 15px;margin:5px;border-radius:13px;background:#203c70;font-weight:950;
+cursor:grab;border:2px solid transparent;user-select:none}.draggable:hover{border-color:var(--accent)}
+.drop-zone{min-height:68px;border:2px dashed #37558b;border-radius:14px;padding:10px;margin:8px 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.drop-zone.over{border-color:var(--green);background:rgba(85,223,154,.08)}
+.drop-zone.correct{border-color:var(--green);background:rgba(85,223,154,.12)}
+.drop-zone.wrong{border-color:var(--red);background:rgba(255,113,136,.1)}
+.drop-zone b{min-width:95px;color:var(--muted)}
+.puzzle-stage{margin:22px 0;padding:26px 18px;min-height:340px;border-radius:25px;background:radial-gradient(circle at center,#183b70 0,#0a1b3b 65%);
+border:1px solid rgba(255,255,255,.09);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.puzzle-label{font-weight:900;color:var(--muted);margin-bottom:16px;font-size:1rem}
+.puzzle-board{width:min(620px,92%);height:175px;position:relative}
+.piece{position:absolute;width:125px;height:68px;display:grid;place-items:center;border-radius:15px;font-size:1.18rem;font-weight:950;color:#07152f;
+box-shadow:0 8px 18px rgba(0,0,0,.28);transition:all 1.7s ease-in-out}
+.p-thousand,.whole-thousand{background:var(--blue)}.p-hundred,.whole-hundred{background:var(--green)}
+.p-ten,.whole-ten{background:var(--accent)}.p-one,.whole-one{background:#ff8ca0}
+.composition-stage:not(.assembled) .p-thousand{left:5%;top:4%;transform:rotate(-12deg)}
+.composition-stage:not(.assembled) .p-hundred{right:5%;top:17%;transform:rotate(10deg)}
+.composition-stage:not(.assembled) .p-ten{left:15%;bottom:3%;transform:rotate(9deg)}
+.composition-stage:not(.assembled) .p-one{right:18%;bottom:0;transform:rotate(-8deg)}
+.composition-stage.assembled .p-thousand{left:50%;top:50%;transform:translate(-100%,-50%)}
+.composition-stage.assembled .p-hundred{left:50%;top:50%;transform:translate(0,-50%)}
+.composition-stage.assembled .p-ten{left:50%;top:50%;transform:translate(-100%,50%)}
+.composition-stage.assembled .p-one{left:50%;top:50%;transform:translate(0,50%)}
+.puzzle-equation,.puzzle-result,.puzzle-whole{font-weight:950;text-align:center}
+.puzzle-equation{font-size:clamp(1.25rem,3vw,1.9rem);color:#fff}
+.puzzle-result{font-size:clamp(1.5rem,4vw,2.5rem);color:var(--accent);margin-top:6px;opacity:0;transition:opacity .7s ease .8s}
+.decomp-board .piece{left:50%;top:50%}.decomp-board .whole-thousand{transform:translate(-100%,-50%)}
+.decomp-board .whole-hundred{transform:translate(0,-50%)}.decomp-board .whole-ten{transform:translate(-100%,50%)}
+.decomp-board .whole-one{transform:translate(0,50%)}
+.decomposition-stage.scattered .whole-thousand{left:7%;top:6%;transform:rotate(-14deg)}
+.decomposition-stage.scattered .whole-hundred{left:auto;right:5%;top:12%;transform:rotate(11deg)}
+.decomposition-stage.scattered .whole-ten{left:15%;top:auto;bottom:3%;transform:rotate(9deg)}
+.decomposition-stage.scattered .whole-one{left:auto;right:19%;top:auto;bottom:0;transform:rotate(-10deg)}
+.progress{height:13px;background:#071a3a;border-radius:99px;overflow:hidden;margin:12px 0 23px}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));width:0%;transition:.3s}
+.question{font-size:clamp(1.35rem,3.5vw,2.1rem);font-weight:900;text-align:center;margin:23px 0}
+.options{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.option{padding:17px;border-radius:16px;background:#203c70;color:#fff;font-weight:900;border:2px solid transparent;transition:.15s}
+.option:hover{border-color:var(--accent);transform:translateY(-2px)}.option.correct{background:#176b50;border-color:var(--green)}
+.option.wrong{background:#7a2940;border-color:var(--red)}
+.feedback{text-align:center;min-height:38px;margin-top:17px;font-weight:900}.feedback.good{color:var(--green)}.feedback.bad{color:#ff9aac}
+.input{width:150px;padding:14px;border-radius:14px;border:2px solid #37558b;background:#071a3a;color:white;text-align:center;font-size:1.15rem;font-weight:800}
+.win{text-align:center}.trophy{font-size:5rem}.score-big{font-size:4rem;font-weight:950;color:var(--accent)}
+.emotions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0}
+.emotion{padding:15px 8px;border-radius:16px;background:#0b1d40;border:2px solid transparent;font-size:1.05rem;font-weight:900;color:#fff}
+.emotion.selected{border-color:var(--accent);background:#203c70}
+textarea{width:100%;min-height:120px;border-radius:16px;padding:15px;background:#071a3a;border:2px solid #37558b;color:#fff;resize:vertical}
+.small{font-size:.88rem;color:var(--muted)}
+.footer{text-align:center;color:#8094bd;font-size:.85rem;padding:18px}
+@media(max-width:760px){
+ .topbar{align-items:flex-start}.grid,.grid.three,.options,.drag-area{grid-template-columns:1fr}
+ .cash-board{grid-template-columns:repeat(2,1fr)}.stepper{grid-template-columns:repeat(2,1fr)}
+ .hero .card{padding:30px 18px}.card{padding:22px;border-radius:22px}.lead{font-size:1rem}
+ .piece{width:105px;height:58px;font-size:1rem}.puzzle-board{height:155px}.emotions{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:430px){.stats{display:none}.cash-board{grid-template-columns:1fr}.puzzle-board{width:100%}}
+
+
+/* ===== JAWABAN KETIK PADA PEMBUKA ===== */
+.opening-formula{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.answer-input{
+  width:min(260px,80vw);
+  padding:12px 16px;
+  border:3px solid rgba(255,210,77,.75);
+  border-radius:14px;
+  background:#fff;
+  color:#13203a;
+  font:800 1.15rem inherit;
+  text-align:center;
+  box-shadow:0 5px 0 rgba(0,0,0,.12);
+}
+.answer-input:focus{
+  outline:3px solid rgba(80,190,255,.55);
+  border-color:#ffd24d;
+}
+
+
+/* ===== MISSION 1: INPUT KOMPOSISI ===== */
+.place-input{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  margin-top:10px;
+  padding:12px 10px;
+  border:3px solid rgba(255,210,77,.55);
+  border-radius:14px;
+  background:#fff;
+  color:#102142;
+  text-align:center;
+  font:900 1.65rem/1.1 inherit;
+  box-shadow:0 4px 0 rgba(0,0,0,.12);
+}
+.place-input:focus{
+  outline:3px solid rgba(78,190,255,.45);
+  border-color:#ffd24d;
+}
+.composition-live-formula{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:7px;
+}
+.composition-live-formula b{color:#ffd24d}
+.editable-cash-board .cash-slot{min-height:155px}
+
+/* ===== GAME ARENA: WAYGROUND ===== */
+.wayground-card{text-align:center}
+.wayground-hero{
+  padding:25px 10px 10px;
+}
+.wayground-logo{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 18px;
+  border-radius:18px;
+  background:#fff;
+  color:#1f2a44;
+  box-shadow:0 8px 22px rgba(0,0,0,.18);
+  margin-bottom:18px;
+}
+.wayground-mark{
+  display:grid;
+  place-items:center;
+  width:44px;height:44px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#6d5dfc,#4aa8ff);
+  color:#fff;
+  font-size:1.55rem;
+  font-weight:950;
+}
+.wayground-word{
+  font-size:1.65rem;
+  font-weight:950;
+  letter-spacing:-.5px;
+}
+.wayground-hero h2{
+  font-size:clamp(2rem,5vw,3.4rem);
+  margin:8px 0 12px;
+  color:#ffd24d;
+}
+.wayground-steps{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin:25px 0;
+}
+.wayground-step{
+  background:#071a3a;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:18px;
+  padding:18px 12px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:7px;
+}
+.wayground-step span{
+  width:34px;height:34px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:#ffd24d;
+  color:#102142;
+  font-weight:950;
+}
+.wayground-step b{font-size:1rem}
+.wayground-step small{color:#b9c8e8;line-height:1.4}
+.wayground-actions{justify-content:center}
+.wayground-open{
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.wayground-note{margin-top:18px;text-align:left}
+.wayground-link-note{margin-top:16px}
+.wayground-link-note a{color:#7cc7ff;font-weight:800}
+@media(max-width:760px){
+  .wayground-steps{grid-template-columns:repeat(2,1fr)}
+  .editable-cash-board{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ===== DASHBOARD NAVIGASI ATAS ===== */
+.dashboard-nav{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  width:100%;
+  background:rgba(7,18,40,.96);
+  border-bottom:1px solid rgba(255,255,255,.12);
+  box-shadow:0 8px 24px rgba(0,0,0,.20);
+  backdrop-filter:blur(12px);
+}
+.dashboard-nav-inner{
+  max-width:1200px;
+  margin:0 auto;
+  padding:8px 14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.dashboard-title{
+  flex:0 0 auto;
+  font-weight:800;
+  font-size:.82rem;
+  color:#fff;
+  white-space:nowrap;
+}
+.dashboard-buttons{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  overflow-x:auto;
+  scrollbar-width:thin;
+  padding-bottom:2px;
+}
+.dash-btn{
+  flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  padding:8px 11px;
+  font:inherit;
+  font-size:.78rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .18s ease, background .18s ease, border-color .18s ease;
+  white-space:nowrap;
+}
+.dash-btn:hover{
+  transform:translateY(-1px);
+  background:rgba(255,255,255,.16);
+  border-color:rgba(255,255,255,.30);
+}
+.dash-btn:active{transform:translateY(0);}
+.dash-btn:focus-visible{
+  outline:3px solid rgba(255,210,77,.8);
+  outline-offset:2px;
+}
+@media (max-width:760px){
+  .dashboard-nav-inner{
+    display:block;
+    padding:7px 10px;
+  }
+  .dashboard-title{
+    margin-bottom:6px;
+    font-size:.75rem;
+  }
+  .dashboard-buttons{
+    gap:6px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .dash-btn{
+    padding:7px 10px;
+    font-size:.72rem;
+  }
+}
+
+
+/* POLISH 7 HAL: dashboard aktif, progress misi, feedback belajar, refleksi, dan halaman pencapaian */
+.dash-btn.active{background:linear-gradient(135deg,#ffd447,#ffad5c);color:#08152f;box-shadow:0 8px 22px rgba(255,212,71,.22);transform:translateY(-1px)}
+.dash-btn.done{border-color:rgba(85,223,154,.7);position:relative}.dash-btn.done::after{content:'✓';margin-left:5px;color:var(--green);font-weight:950}
+.learning-strip{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 20px}.learning-chip{padding:8px 12px;border-radius:999px;background:#203c70;border:1px solid rgba(255,255,255,.08);font-size:.85rem;font-weight:850;color:#dfe8ff}
+.concept-box{margin-top:16px;padding:16px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(85,184,255,.12),rgba(85,223,154,.08));border:1px solid rgba(85,184,255,.25)}
+.concept-box strong{color:var(--accent)}
+.mission-progress{display:flex;align-items:center;gap:12px;margin:8px 0 20px}.mission-progress .track{flex:1;height:12px;background:#071a3a;border-radius:999px;overflow:hidden}.mission-progress .track span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green),var(--accent));transition:width .35s ease}.mission-progress .label{font-size:.9rem;font-weight:900;color:var(--muted);white-space:nowrap}
+.question-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;color:var(--muted);font-weight:800;font-size:.9rem}.answer-explain{margin-top:10px;padding:12px 14px;border-radius:14px;background:#0b1d40;color:#dce7ff;text-align:left;font-size:.95rem;line-height:1.5}
+.achievement-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}.achievement{padding:15px 10px;border-radius:17px;background:#0b1d40;border:1px solid rgba(255,255,255,.08);text-align:center;font-weight:850}.achievement .icon{font-size:1.8rem;display:block;margin-bottom:5px}.achievement small{color:var(--muted)}
+.next-hint{margin-top:15px;padding:12px 14px;border-radius:14px;background:rgba(255,212,71,.08);border:1px solid rgba(255,212,71,.2);color:#ffeaa0;font-weight:800}
+@media(max-width:700px){.achievement-grid{grid-template-columns:repeat(2,1fr)}.mission-progress{align-items:flex-start;flex-direction:column}.mission-progress .track{width:100%}}
+
+
+/* REFLEKSI KELAS • GOOGLE FORM */
+.class-reflection-card{background:linear-gradient(135deg,rgba(85,184,255,.10),rgba(85,223,154,.08));border:1px solid rgba(85,184,255,.24);}
+.reflection-gateway{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:center;margin-top:18px;}
+.reflection-steps{display:grid;gap:11px;margin:18px 0;}
+.reflection-step{display:flex;gap:12px;align-items:flex-start;padding:13px 15px;border-radius:16px;background:#0b1d40;border:1px solid rgba(255,255,255,.08);}
+.reflection-step .num{flex:0 0 32px;height:32px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#55b8ff,#55df9a);color:#08152f;font-weight:950;}
+.qr-wrap{background:#fff;border-radius:22px;padding:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 35px rgba(0,0,0,.24);}
+.qr-wrap svg{width:100%;max-width:245px;height:auto;display:block;}
+.reflection-note{padding:14px 16px;border-radius:15px;background:rgba(255,212,71,.08);border:1px solid rgba(255,212,71,.22);color:#ffeaa0;font-weight:800;margin-top:16px;}
+.reflection-test{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px;}
+@media(max-width:760px){.reflection-gateway{grid-template-columns:1fr}.qr-wrap{max-width:290px;margin:0 auto}.reflection-test{flex-direction:column;align-items:stretch}.reflection-test .btn{width:100%;}}
+
+/* Game Misi 3: pertandingan antar tiga kelompok */
+.team-scoreboard{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}
+.team-score{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 10px;border-radius:18px;background:#0b1d40;border:2px solid rgba(255,255,255,.12);text-align:center}
+.team-score span{font-weight:900}.team-score strong{font-size:2.2rem;line-height:1.15;color:var(--accent)}.team-score small{color:var(--muted)}
+.team-one{border-color:#55b8ff}.team-two{border-color:#55df9a}.team-three{border-color:#c4a0ff}
+.team-question-box{padding:20px;border-radius:20px;background:#071a3a;border:1px solid rgba(255,212,71,.35);margin:18px 0}
+.question-kicker{font-size:.85rem;letter-spacing:.08em;font-weight:950;color:var(--accent);margin-bottom:8px}
+.team-answer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.team-answer-card{padding:18px;border-radius:20px;background:#0b1d40;border:2px solid rgba(255,255,255,.12);min-width:0}
+.team-one-card{border-top:5px solid #55b8ff}.team-two-card{border-top:5px solid #55df9a}.team-three-card{border-top:5px solid #c4a0ff}
+.team-title{display:flex;align-items:center;gap:8px;margin-bottom:12px}.team-title span{font-size:1.5rem}.team-title h3{margin:0}
+.team-answer-card label{display:block;font-size:.9rem;color:var(--muted);margin-bottom:7px}
+.team-answer-input{width:100%;min-width:0;padding:12px;border-radius:12px;border:2px solid #37558b;background:#071a3a;color:#fff;margin-bottom:10px}
+.team-answer-input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.team-submit{width:100%;padding:11px 12px;font-size:.92rem}
+.team-submit:disabled,.team-answer-input:disabled{opacity:.55;cursor:not-allowed}
+.team-feedback{font-size:.9rem;line-height:1.45;min-height:42px;margin-top:10px;color:var(--muted);overflow-wrap:anywhere}
+.team-feedback.good{color:var(--green);font-weight:800}.team-feedback.bad{color:#ff9cab;font-weight:800}
+
+.team-options{display:grid;gap:9px;margin:12px 0 14px}
+.team-option{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;padding:11px 12px;border-radius:12px;border:2px solid #37558b;background:#10264d;color:#fff;cursor:pointer;line-height:1.4;transition:transform .15s,border-color .15s,background .15s}
+.team-option:hover:not(:disabled){border-color:var(--accent);transform:translateY(-1px)}
+.team-option .option-letter{display:inline-flex;align-items:center;justify-content:center;flex:0 0 28px;height:28px;border-radius:8px;background:#274778;font-weight:800}
+.team-option.selected{border-color:var(--accent);background:#203c69;box-shadow:0 0 0 1px var(--accent)}
+.team-option:disabled{opacity:.65;cursor:not-allowed}
+.team-option.correct-choice{border-color:var(--green);background:rgba(85,223,154,.14)}
+
+.winner-announcement{margin:18px 0;padding:22px;text-align:center;border:2px solid #f7c948;background:linear-gradient(135deg,rgba(247,201,72,.18),rgba(85,223,154,.12));border-radius:18px;font-size:1.08rem}
+.winner-announcement .winner-emoji{font-size:2.4rem;display:block;margin-bottom:8px}
+.winner-announcement .winner-names{font-size:1.35rem;font-weight:900;color:#ffdc68;display:block;margin:8px 0}
+.winner-announcement .winner-message{display:block;line-height:1.6}
+.team-final-scores{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0 20px}
+.team-final-score{padding:14px 10px;text-align:center;border:1px solid #37558b;border-radius:14px;background:#10264d}
+.team-final-score strong{display:block;font-size:1rem;margin-bottom:6px}
+.team-final-score span{font-size:1.5rem;font-weight:900}
+.team-final-score.champion{border:2px solid #f7c948;background:rgba(247,201,72,.12)}
+@media(max-width:650px){.team-final-scores{grid-template-columns:1fr}}
+
+
+.team-answer-card.winner{box-shadow:0 0 0 2px var(--green),0 0 24px rgba(85,223,154,.18)}
+.team-answer-card.locked{opacity:.72}
+@media(max-width:800px){.team-answer-grid{grid-template-columns:1fr}.team-scoreboard{gap:8px}.team-score{padding:12px 6px}.team-score strong{font-size:1.8rem}.team-answer-card{padding:16px}}
+
+</style>
+</head>
+<body>
+
+<!-- DASHBOARD NAVIGASI -->
+<nav class="dashboard-nav" aria-label="Navigasi cepat petualangan">
+  <div class="dashboard-nav-inner">
+    <div class="dashboard-title">🧭 Navigasi Petualangan</div>
+    <div class="dashboard-buttons">
+      <button type="button" class="dash-btn" data-page="home" onclick="show('home')">🏠 <span>Beranda Awal</span></button>
+      <button type="button" class="dash-btn" data-page="mission1" onclick="show('mission1')">🧩 <span>Misi 1</span></button>
+      <button type="button" class="dash-btn" data-page="mission2" onclick="show('mission2')">💰 <span>Misi 2</span></button>
+      <button type="button" class="dash-btn" data-page="mission3" onclick="show('mission3')">⚡ <span>Misi 3</span></button>
+      <button type="button" class="dash-btn" data-page="game" onclick="show('game')">🎯 <span>Game Arena</span></button>
+      <button type="button" class="dash-btn" data-page="reflection" onclick="show('reflection')">💭 <span>Refleksi Kelas</span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="app">
+<header class="topbar">
+  <div class="logo">🧭 Petualangan <span>Bilangan</span></div>
+  <div class="stats">
+    <div class="pill">🎯 Skor Arena: <b id="score">0</b>/100</div>
+    <div class="pill">🎯 Tahap: <b id="stage">Pembuka</b></div>
+  </div>
+</header>
+
+<main>
+<section id="home" class="screen active">
+  <div class="hero">
+    <div class="card">
+      <div class="island-map">
+        <div class="island i1"></div><div class="island i2"></div><div class="island i3"></div>
+        <div class="palm p1">🌴</div><div class="palm p2">🌴</div><div class="palm p3">🌴</div>
+        <div class="map-path"></div><div class="avatar">🧑‍🏫</div>
+        <div class="coin c1">🪙</div><div class="coin c2">🪙</div><div class="coin c3">🪙</div>
+        <div class="star s1">⭐</div><div class="star s2">⭐</div>
+      </div>
+      <span class="badge">MATEMATIKA • KELAS 4 / FASE B</span>
+      <h1>Kasir Cerdas di Pulau Bilangan</h1>
+      <p class="lead">Hari ini kamu akan menjadi <b>Kasir</b> dan <b>Pembeli Cerdas</b>. Gunakan kartu uang bersama kelompok, lalu buktikan jawabannya di papan digital.</p>
+      <div class="notice" style="text-align:left;margin-top:18px">
+        <b>🎯 Misi hari ini:</b> menyusun dan menguraikan bilangan cacah sampai 10.000 berdasarkan nilai tempat: ribuan, ratusan, puluhan, dan satuan.
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="show('opening')">🚀 Mulai Misi</button>
+      </div>
+      <p class="small">Media pendamping Papan Interaktif Digital • Dapat digunakan tanpa internet</p>
+    </div>
+  </div>
+</section>
+
+<section id="opening" class="screen">
+  <div class="card">
+    <h2>🧾 Pembuka: Struk Belanja Robek</h2>
+    <p class="lead">Perhatikan masalah berikut. Diskusikan jawabannya dengan kelompok menggunakan kartu uang di meja.</p>
+    <div class="receipt">
+      <h3>STRUK TOKO KELAS</h3>
+      <div class="row"><span>Pensil warna</span><b>Rp4.000</b></div>
+      <div class="row"><span>Penghapus</span><b>Rp500</b></div>
+      <div class="total"><span>Total</span> <span class="torn">bagian ini robek!</span></div>
+    </div>
+    
+<div class="formula opening-formula">
+  <span>Rp4.000 + Rp500 =</span>
+  <input id="openingAnswer" class="answer-input" type="text"
+         inputmode="numeric" autocomplete="off"
+         placeholder="Ketik jawaban"
+         aria-label="Jawaban total pembayaran">
+</div>
+
+    <div class="warning"><b>💬 Pertanyaan pemantik:</b> “Bagaimana cara kalian menyusun pecahan uang agar mendapatkan total pembayaran?”</div>
+    <div class="actions">
+      <button class="btn" onclick="checkOpening()">✅ Periksa Jawaban</button>
+      <button class="btn secondary" onclick="show('roles')">➡️ Lanjut</button>
+    </div>
+    <div class="feedback" id="openingFeedback"></div>
+  </div>
+</section>
+
+<section id="roles" class="screen">
+  <div class="card">
+    <h2>🤝 Siapkan Kelompok Kasir Cerdas</h2>
+    <p class="lead">Pembelajaran dilakukan bersama. Bagikan peran sesuai kesiapan dan minat anggota kelompok.</p>
+    <div class="grid three">
+      <div class="role-card"><div class="role-icon">💵</div><h3>Pengelola Kartu Uang</h3><p class="content">Mengambil dan menyusun kartu uang secara konkret di meja.</p></div>
+      <div class="role-card"><div class="role-icon">🖥️</div><h3>Operator Papan Digital</h3><p class="content">Mencocokkan susunan kartu dengan aktivitas pada layar.</p></div>
+      <div class="role-card"><div class="role-icon">🗣️</div><h3>Juru Bicara</h3><p class="content">Menjelaskan alasan kelompok dengan jelas dan sopan.</p></div>
+    </div>
+    <div class="notice" style="margin-top:18px"><b>Aturan penting:</b> jangan takut salah. Diskusikan, coba, periksa, lalu perbaiki bersama.</div>
+    <div class="actions"><button class="btn" onclick="show('mission1')">🛒 Misi 1: Pembeli</button></div>
+  </div>
+</section>
+
+<section id="mission1" class="screen">
+  <div class="card">
+    <span class="badge">MISI 1 • 15 MENIT • KOMPOSISI</span>
+    <div class="mission-progress"><div class="track"><span style="width:33%"></span></div><div class="label">Misi 1 dari 3 • Menyusun bilangan</div></div>
+    <h2>🛍️ Simulasi Pembeli — Susun Harga Tas</h2>
+    <p class="lead">Kelompokmu ingin membeli tas seharga <b>Rp2.425</b>. Susun kartu uang di meja terlebih dahulu.</p>
+    <div class="receipt">
+      <h3>👜 TAS SEKOLAH</h3>
+      <div class="row"><span>Harga</span><b>Rp2.425</b></div>
+      <div class="row"><span>Ribuan</span><b id="receiptThousands">2.000</b></div>
+      <div class="row"><span>Ratusan</span><b id="receiptHundreds">400</b></div>
+      <div class="row"><span>Puluhan</span><b id="receiptTens">20</b></div>
+      <div class="row"><span>Satuan</span><b id="receiptOnes">5</b></div>
+    </div>
+    <div class="cash-board editable-cash-board">
+      <div class="cash-slot">
+        <strong>RIBUAN</strong>
+        <input class="place-input" id="thousandsInput" type="number" inputmode="numeric" min="0" step="1000" value="2000" aria-label="Nilai ribuan">
+      </div>
+      <div class="cash-slot">
+        <strong>RATUSAN</strong>
+        <input class="place-input" id="hundredsInput" type="number" inputmode="numeric" min="0" step="100" value="400" aria-label="Nilai ratusan">
+      </div>
+      <div class="cash-slot">
+        <strong>PULUHAN</strong>
+        <input class="place-input" id="tensInput" type="number" inputmode="numeric" min="0" step="10" value="20" aria-label="Nilai puluhan">
+      </div>
+      <div class="cash-slot">
+        <strong>SATUAN</strong>
+        <input class="place-input" id="onesInput" type="number" inputmode="numeric" min="0" step="1" value="5" aria-label="Nilai satuan">
+      </div>
+    </div>
+    <div class="formula composition-live-formula">
+      <span id="compositionExpression">2.000 + 400 + 20 + 5</span>
+      <span> = </span>
+      <b id="compositionTotal">2.425</b>
+    </div>
+    <div class="notice">
+      ✏️ <b>Coba ubah angkanya!</b> Ketik nilai ribuan, ratusan, puluhan, dan satuan. Hasil komposisi di bawah akan berubah otomatis.
+    </div>
+    <div class="concept-box" id="compositionFeedback"><strong>🧠 Makna komposisi:</strong> bagian-bagian bilangan digabungkan untuk membentuk satu bilangan utuh.</div>
+    <div class="actions">
+      <button class="btn ghost" onclick="resetCompositionInputs()">🔄 Kembalikan Contoh</button>
+      <button class="btn" onclick="playComposition()">▶️ Lihat Puzzle Menyatu</button>
+      <button class="btn secondary" onclick="show('mission2')">🔍 Misi 2: Kasir</button>
+    </div>
+    <div class="puzzle-stage composition-stage">
+      <div class="puzzle-label" id="compLabel">Bagian bilangan siap disatukan...</div>
+      <div class="puzzle-board">
+        <div class="piece p-thousand">2.000</div><div class="piece p-hundred">400</div>
+        <div class="piece p-ten">20</div><div class="piece p-one">5</div>
+      </div>
+      <div class="puzzle-equation" id="puzzleEquation">2.000 + 400 + 20 + 5</div>
+      <div class="puzzle-result" id="compResult">= 2.425</div>
+    </div>
+    <div class="notice"><b>🧠 Jelaskan:</b> Mengapa kartu Rp2.000, Rp400, Rp20, dan Rp5 jika digabungkan menjadi Rp2.425? Juru bicara kelompok dapat menjelaskan di depan kelas.</div>
+  </div>
+</section>
+
+<section id="mission2" class="screen">
+  <div class="card">
+    <span class="badge">MISI 2 • 15 MENIT • DEKOMPOSISI</span>
+    <div class="mission-progress"><div class="track"><span style="width:66%"></span></div><div class="label">Misi 2 dari 3 • Menguraikan bilangan</div></div>
+    <h2>🧾 Simulasi Kasir — Uraikan Pembayaran</h2>
+    <p class="lead">Sekarang balik peran. Pembeli menyerahkan uang <b>Rp8.756</b>. Sebagai kasir, uraikan berdasarkan nilai tempat.</p>
+    <div class="stepper">
+      <div class="step active">1. Ribuan</div><div class="step">2. Ratusan</div><div class="step">3. Puluhan</div><div class="step">4. Satuan</div>
+    </div>
+    <div class="formula">Rp8.756 = 8.000 + 700 + 50 + 6</div>
+    <div class="concept-box"><strong>🧠 Ingat:</strong> dekomposisi berarti menguraikan bilangan utuh menjadi bagian sesuai nilai tempatnya.</div>
+    <div class="drag-area">
+      <div class="drag-pieces">
+        <h3>🪙 Kartu nilai tempat</h3>
+        <p class="small">Coba seret kartu ke wadah yang sesuai. Pada Papan Interaktif, aktivitas ini dapat dilakukan oleh operator.</p>
+        <div id="pieces">
+          <span class="draggable" draggable="true" data-place="ribuan" data-value="8.000">8.000</span>
+          <span class="draggable" draggable="true" data-place="ratusan" data-value="700">700</span>
+          <span class="draggable" draggable="true" data-place="puluhan" data-value="50">50</span>
+          <span class="draggable" draggable="true" data-place="satuan" data-value="6">6</span>
+        </div>
+        <button class="btn ghost" onclick="resetDrops()">🔄 Ulangi Susunan</button>
+      </div>
+      <div class="drop-targets">
+        <h3>🏦 Wadah Nilai Tempat</h3>
+        <div class="drop-zone" data-place="ribuan"><b>Ribuan</b></div>
+        <div class="drop-zone" data-place="ratusan"><b>Ratusan</b></div>
+        <div class="drop-zone" data-place="puluhan"><b>Puluhan</b></div>
+        <div class="drop-zone" data-place="satuan"><b>Satuan</b></div>
+      </div>
+    </div>
+    <div class="feedback" id="dropFeedback"></div>
+    <div class="actions">
+      <button class="btn" onclick="checkDrops()">✅ Periksa Dekomposisi</button>
+      <button class="btn secondary" onclick="show('mission3')">⚡ Misi 3: Kasir Cepat & Tepat</button>
+    </div>
+    <div class="puzzle-stage decomposition-stage">
+      <div class="puzzle-label" id="decompLabel">Bilangan utuh: 8.756</div>
+      <div class="puzzle-board decomp-board">
+        <div class="piece whole-thousand">8.000</div><div class="piece whole-hundred">700</div>
+        <div class="piece whole-ten">50</div><div class="piece whole-one">6</div>
+      </div>
+      <div class="puzzle-whole">8.756</div>
+      <div class="puzzle-equation">8.756 = 8.000 + 700 + 50 + 6</div>
+    </div>
+    <div class="actions"><button class="btn green" onclick="playDecomposition()">▶️ Lihat Puzzle Terurai</button></div>
+  </div>
+</section>
+
+<section id="mission3" class="screen">
+  <div class="card">
+    <span class="badge">MISI 3 • GAME ANTAR KELOMPOK</span>
+    <div class="mission-progress">
+      <div class="track"><span id="mission3Progress" style="width:0%"></span></div>
+      <div class="label" id="mission3Label">Misi 3 • Soal 1 dari 8</div>
+    </div>
+    <div class="challenge-head" style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+      <h2 style="margin:0">🏆 Tantangan 3 Kelompok</h2>
+      <div class="pill">Soal <b id="qnum">1</b>/8</div>
+    </div>
+    <p class="lead">Diskusikan soal bersama kelompok, lalu pilih satu jawaban dari opsi <b>A, B, C, atau D</b> pada kolom kelompok masing-masing dan tekan <b>Kirim Jawaban</b>. Jawaban salah tidak mengakhiri soal—kelompok lain masih boleh mencoba. Setiap soal hanya dapat dimenangkan oleh satu kelompok.</p>
+
+    <div class="team-scoreboard">
+      <div class="team-score team-one"><span>🔵 Kelompok 1</span><strong id="scoreTeam1">0</strong><small>poin</small></div>
+      <div class="team-score team-two"><span>🟢 Kelompok 2</span><strong id="scoreTeam2">0</strong><small>poin</small></div>
+      <div class="team-score team-three"><span>🟣 Kelompok 3</span><strong id="scoreTeam3">0</strong><small>poin</small></div>
+    </div>
+
+    <div class="progress"><span id="progress"></span></div>
+    <div class="team-question-box">
+      <div class="question-kicker">📣 PERTANYAAN UNTUK SEMUA KELOMPOK</div>
+      <div class="question" id="question"></div>
+      <p class="small" style="margin:8px 0 0">Setiap kelompok memiliki pilihan jawaban A, B, C, dan D. Pilih satu opsi sebelum menekan tombol kirim.</p>
+    </div>
+
+    <div class="team-answer-grid">
+      <div class="team-answer-card team-one-card">
+        <div class="team-title"><span>🔵</span><h3>Kelompok 1</h3></div>
+        <div class="team-options" id="teamOptions1" role="group" aria-label="Pilihan jawaban Kelompok 1"></div>
+        <button class="btn team-submit" id="submitTeam1" onclick="submitTeamAnswer(1)">Kirim Jawaban</button>
+        <div class="team-feedback" id="teamFeedback1" aria-live="polite"></div>
+      </div>
+      <div class="team-answer-card team-two-card">
+        <div class="team-title"><span>🟢</span><h3>Kelompok 2</h3></div>
+        <div class="team-options" id="teamOptions2" role="group" aria-label="Pilihan jawaban Kelompok 2"></div>
+        <button class="btn team-submit" id="submitTeam2" onclick="submitTeamAnswer(2)">Kirim Jawaban</button>
+        <div class="team-feedback" id="teamFeedback2" aria-live="polite"></div>
+      </div>
+      <div class="team-answer-card team-three-card">
+        <div class="team-title"><span>🟣</span><h3>Kelompok 3</h3></div>
+        <div class="team-options" id="teamOptions3" role="group" aria-label="Pilihan jawaban Kelompok 3"></div>
+        <button class="btn team-submit" id="submitTeam3" onclick="submitTeamAnswer(3)">Kirim Jawaban</button>
+        <div class="team-feedback" id="teamFeedback3" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="feedback" id="feedback" aria-live="polite">✨ Ketiga kelompok siap? Baca soal dan mulai berdiskusi!</div>
+    <div class="actions">
+      <button class="btn ghost" id="nextBtn" style="display:none" onclick="nextQuestion()">➡️ Soal Berikutnya</button>
+      <button class="btn secondary" onclick="resetCurrentQuestion()" id="resetQuestionBtn">🔄 Ulangi Soal Ini</button>
+    </div>
+    <div class="notice" style="margin-top:18px">
+      <b>📌 Aturan skor:</b> kelompok pertama yang menjawab benar memperoleh <b>20 poin</b>. Setelah jawaban benar ditemukan, soal terkunci dan kelompok lain tidak bisa memperoleh poin dari soal yang sama. Jika jawaban salah, kelompok lain tetap dapat mencoba.
+    </div>
+  </div>
+</section>
+
+
+<section id="game" class="screen">
+  <div class="card wayground-card">
+    <span class="badge">GAME ARENA • ASESMEN DIGITAL</span>
+    <div class="wayground-hero">
+      <div class="wayground-logo" aria-label="Logo ZEP QUIZ">
+        <span class="wayground-mark">Z</span>
+        <span class="wayground-word">ZEP QUIZ</span>
+      </div>
+      <h2>It's Time to go to ZEP QUIZ!</h2>
+      <p class="lead">
+        Sekarang waktunya menunjukkan kemampuanmu! 📱
+        Ambil HP masing-masing, buka laman ZEP QUIZ, lalu ikuti asesmen yang sudah disiapkan guru.
+      </p>
+    </div>
+
+    <div class="wayground-steps">
+      <div class="wayground-step"><span>1</span><b>Siapkan HP</b><small>Pastikan terhubung ke internet.</small></div>
+      <div class="wayground-step"><span>2</span><b>Buka ZEP QUIZ</b><small>Masuk melalui tombol di bawah.</small></div>
+      <div class="wayground-step"><span>3</span><b>Masukkan kode</b><small>Gunakan kode yang diberikan guru.</small></div>
+      <div class="wayground-step"><span>4</span><b>Mulai!</b><small>Kerjakan dengan teliti dan percaya diri.</small></div>
+    </div>
+
+    <div class="notice wayground-note">
+      🎯 <b>Ingat:</b> kerjakan sendiri dengan jujur. Baca setiap soal dengan teliti sebelum memilih jawaban.
+    </div>
+
+    <div class="actions wayground-actions">
+      <a class="btn wayground-open" href="https://quiz.zep.us/id/code-login" target="_blank" rel="noopener noreferrer">
+        🚀 Buka ZEP QUIZ
+      </a>
+      <button class="btn secondary" onclick="show('reflection')">💭 Setelah selesai → Refleksi</button>
+    </div>
+
+    <p class="small wayground-link-note">
+      ZEP QUIZ dapat dibuka melalui browser di HP, tablet, atau komputer. 
+      <a href="https://quiz.zep.us/id" target="_blank" rel="noopener noreferrer">Buka ZEP QUIZ</a>
+    </p>
+  </div>
+</section>
+
+
+<section id="win" class="screen">
+  <div class="card win">
+    <div class="trophy">🏆</div>
+    <h2>Kasir Cerdas Berhasil!</h2>
+    <p class="lead">Kamu telah menyelesaikan 8 tantangan literasi dan numerasi. Saatnya mengumumkan kelompok dengan skor tertinggi!</p>
+    <div id="winnerAnnouncement" class="notice winner-announcement" aria-live="polite">
+      <b>🏆 Menentukan pemenang...</b>
+    </div>
+    <div class="team-final-scores" id="teamFinalScores"></div>
+    <div class="score-big" id="finalScore">0</div><p>🎯 skor Misi 3 dari 8 soal (maksimal 160)</p>
+    <div class="achievement-grid">
+      <div class="achievement"><span class="icon">🧩</span>Misi 1<small>Komposisi</small></div>
+      <div class="achievement"><span class="icon">💰</span>Misi 2<small>Dekomposisi</small></div>
+      <div class="achievement"><span class="icon">⚡</span>Misi 3<small>8 tantangan</small></div>
+      <div class="achievement"><span class="icon">🏆</span>Kasir Cerdas<small>Petualangan selesai</small></div>
+    </div>
+    <div class="notice"><b>🎉 Perjalanan selesai!</b> Kamu sudah melewati tiga misi. Sekarang tunjukkan pemahamanmu melalui asesmen digital ZEP QUIZ yang disiapkan guru.</div>
+    <div class="actions">
+      <button class="btn" onclick="show('game')">🚀 Menuju ZEP QUIZ</button>
+      <button class="btn secondary" onclick="show('reflection')">💭 Refleksi Siswa</button>
+      <button class="btn danger" onclick="restart()">🔄 Mulai Lagi</button>
+    </div>
+  </div>
+</section>
+
+<section id="reflection" class="screen">
+  <div class="card class-reflection-card">
+    <span class="badge">PENUTUP • REFLEKSI KELAS • BISA DARI BANYAK HP</span>
+    <h2>💭 Papan Refleksi Kelas</h2>
+    <p class="lead">Perjalananmu sebagai Kasir Cerdas hampir selesai! Sekarang, ceritakan pengalaman belajar hari ini. Jawabanmu akan bergabung dengan jawaban teman-temanmu untuk menjadi refleksi seluruh kelas.</p>
+
+    <div class="reflection-gateway">
+      <div>
+        <div class="learning-strip">
+          <span class="learning-chip">🤩 Perasaan belajar</span>
+          <span class="learning-chip">🔢 Komposisi bilangan</span>
+          <span class="learning-chip">🧩 Dekomposisi bilangan</span>
+          <span class="learning-chip">💰 Pecahan uang</span>
+        </div>
+
+        <div class="reflection-steps">
+          <div class="reflection-step"><span class="num">1</span><div><b>Siapkan HP</b><br><span class="small">Kamu boleh mengisi sendiri atau bergantian dengan teman.</span></div></div>
+          <div class="reflection-step"><span class="num">2</span><div><b>Buka refleksi</b><br><span class="small">Tekan tombol di bawah atau scan QR Code.</span></div></div>
+          <div class="reflection-step"><span class="num">3</span><div><b>Jawab dengan jujur</b><br><span class="small">Tidak ada jawaban benar atau salah. Pilih yang paling sesuai dengan pengalamanmu.</span></div></div>
+          <div class="reflection-step"><span class="num">4</span><div><b>Kirim respons</b><br><span class="small">Jawabanmu otomatis masuk ke Papan Refleksi Kelas.</span></div></div>
+        </div>
+
+        <div class="reflection-note">💡 <b>Catatan:</b> Form yang sama dapat digunakan dari beberapa HP. Setelah satu siswa menekan <b>Kirim</b>, HP dapat diberikan kepada teman berikutnya.</div>
+
+        <div class="reflection-test">
+          <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeIeWRdfCyJ86S2w9x-xLu5YmUL64P5llucC9Vm_NtCRd39YQ/viewform" target="_blank" rel="noopener noreferrer">💭 Isi Refleksi Kelas</a>
+          <button class="btn secondary" type="button" onclick="show('win')">🏆 Lihat Pencapaian</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="qr-wrap" aria-label="QR Code Refleksi Kelas">b'<svg width="39.2mm" height="39.2mm" version="1.1" viewBox="0 0 39.2 39.2" xmlns="http://www.w3.org/2000/svg"><path d="M3.2,3.2H4V4H3.2zM4,3.2H4.8V4H4zM4.8,3.2H5.6V4H4.8zM5.6,3.2H6.4V4H5.6zM6.4,3.2H7.2V4H6.4zM7.2,3.2H8V4H7.2zM8,3.2H8.8V4H8zM9.6,3.2H10.4V4H9.6zM10.4,3.2H11.2V4H10.4zM12.8,3.2H13.6V4H12.8zM14.4,3.2H15.2V4H14.4zM19.2,3.2H20V4H19.2zM20.8,3.2H21.6V4H20.8zM23.2,3.2H24V4H23.2zM24,3.2H24.8V4H24zM24.8,3.2H25.6V4H24.8zM30.4,3.2H31.2V4H30.4zM31.2,3.2H32V4H31.2zM32,3.2H32.8V4H32zM32.8,3.2H33.6V4H32.8zM33.6,3.2H34.4V4H33.6zM34.4,3.2H35.2V4H34.4zM35.2,3.2H36V4H35.2zM3.2,4H4V4.8H3.2zM8,4H8.8V4.8H8zM10.4,4H11.2V4.8H10.4zM11.2,4H12V4.8H11.2zM12,4H12.8V4.8H12zM12.8,4H13.6V4.8H12.8zM13.6,4H14.4V4.8H13.6zM15.2,4H16V4.8H15.2zM16.8,4H17.6V4.8H16.8zM17.6,4H18.4V4.8H17.6zM19.2,4H20V4.8H19.2zM20.8,4H21.6V4.8H20.8zM22.4,4H23.2V4.8H22.4zM24,4H24.8V4.8H24zM25.6,4H26.4V4.8H25.6zM30.4,4H31.2V4.8H30.4zM35.2,4H36V4.8H35.2zM3.2,4.8H4V5.6H3.2zM4.8,4.8H5.6V5.6H4.8zM5.6,4.8H6.4V5.6H5.6zM6.4,4.8H7.2V5.6H6.4zM8,4.8H8.8V5.6H8zM9.6,4.8H10.4V5.6H9.6zM10.4,4.8H11.2V5.6H10.4zM13.6,4.8H14.4V5.6H13.6zM15.2,4.8H16V5.6H15.2zM16,4.8H16.8V5.6H16zM17.6,4.8H18.4V5.6H17.6zM19.2,4.8H20V5.6H19.2zM20,4.8H20.8V5.6H20zM21.6,4.8H22.4V5.6H21.6zM23.2,4.8H24V5.6H23.2zM24.8,4.8H25.6V5.6H24.8zM26.4,4.8H27.2V5.6H26.4zM28,4.8H28.8V5.6H28zM30.4,4.8H31.2V5.6H30.4zM32,4.8H32.8V5.6H32zM32.8,4.8H33.6V5.6H32.8zM33.6,4.8H34.4V5.6H33.6zM35.2,4.8H36V5.6H35.2zM3.2,5.6H4V6.4H3.2zM4.8,5.6H5.6V6.4H4.8zM5.6,5.6H6.4V6.4H5.6zM6.4,5.6H7.2V6.4H6.4zM8,5.6H8.8V6.4H8zM11.2,5.6H12V6.4H11.2zM12,5.6H12.8V6.4H12zM15.2,5.6H16V6.4H15.2zM17.6,5.6H18.4V6.4H17.6zM19.2,5.6H20V6.4H19.2zM22.4,5.6H23.2V6.4H22.4zM23.2,5.6H24V6.4H23.2zM24,5.6H24.8V6.4H24zM27.2,5.6H28V6.4H27.2zM28,5.6H28.8V6.4H28zM30.4,5.6H31.2V6.4H30.4zM32,5.6H32.8V6.4H32zM32.8,5.6H33.6V6.4H32.8zM33.6,5.6H34.4V6.4H33.6zM35.2,5.6H36V6.4H35.2zM3.2,6.4H4V7.2H3.2zM4.8,6.4H5.6V7.2H4.8zM5.6,6.4H6.4V7.2H5.6zM6.4,6.4H7.2V7.2H6.4zM8,6.4H8.8V7.2H8zM12.8,6.4H13.6V7.2H12.8zM16,6.4H16.8V7.2H16zM17.6,6.4H18.4V7.2H17.6zM20,6.4H20.8V7.2H20zM20.8,6.4H21.6V7.2H20.8zM21.6,6.4H22.4V7.2H21.6zM23.2,6.4H24V7.2H23.2zM24.8,6.4H25.6V7.2H24.8zM26.4,6.4H27.2V7.2H26.4zM28,6.4H28.8V7.2H28zM30.4,6.4H31.2V7.2H30.4zM32,6.4H32.8V7.2H32zM32.8,6.4H33.6V7.2H32.8zM33.6,6.4H34.4V7.2H33.6zM35.2,6.4H36V7.2H35.2zM3.2,7.2H4V8H3.2zM8,7.2H8.8V8H8zM9.6,7.2H10.4V8H9.6zM11.2,7.2H12V8H11.2zM12.8,7.2H13.6V8H12.8zM14.4,7.2H15.2V8H14.4zM16.8,7.2H17.6V8H16.8zM17.6,7.2H18.4V8H17.6zM19.2,7.2H20V8H19.2zM20.8,7.2H21.6V8H20.8zM22.4,7.2H23.2V8H22.4zM23.2,7.2H24V8H23.2zM24,7.2H24.8V8H24zM25.6,7.2H26.4V8H25.6zM27.2,7.2H28V8H27.2zM28.8,7.2H29.6V8H28.8zM30.4,7.2H31.2V8H30.4zM35.2,7.2H36V8H35.2zM3.2,8H4V8.8H3.2zM4,8H4.8V8.8H4zM4.8,8H5.6V8.8H4.8zM5.6,8H6.4V8.8H5.6zM6.4,8H7.2V8.8H6.4zM7.2,8H8V8.8H7.2zM8,8H8.8V8.8H8zM9.6,8H10.4V8.8H9.6zM11.2,8H12V8.8H11.2zM12.8,8H13.6V8.8H12.8zM14.4,8H15.2V8.8H14.4zM16,8H16.8V8.8H16zM17.6,8H18.4V8.8H17.6zM19.2,8H20V8.8H19.2zM20.8,8H21.6V8.8H20.8zM22.4,8H23.2V8.8H22.4zM24,8H24.8V8.8H24zM25.6,8H26.4V8.8H25.6zM27.2,8H28V8.8H27.2zM28.8,8H29.6V8.8H28.8zM30.4,8H31.2V8.8H30.4zM31.2,8H32V8.8H31.2zM32,8H32.8V8.8H32zM32.8,8H33.6V8.8H32.8zM33.6,8H34.4V8.8H33.6zM34.4,8H35.2V8.8H34.4zM35.2,8H36V8.8H35.2zM13.6,8.8H14.4V9.6H13.6zM14.4,8.8H15.2V9.6H14.4zM16,8.8H16.8V9.6H16zM17.6,8.8H18.4V9.6H17.6zM18.4,8.8H19.2V9.6H18.4zM20.8,8.8H21.6V9.6H20.8zM22.4,8.8H23.2V9.6H22.4zM24,8.8H24.8V9.6H24zM3.2,9.6H4V10.4H3.2zM4.8,9.6H5.6V10.4H4.8zM8,9.6H8.8V10.4H8zM8.8,9.6H9.6V10.4H8.8zM11.2,9.6H12V10.4H11.2zM12,9.6H12.8V10.4H12zM12.8,9.6H13.6V10.4H12.8zM13.6,9.6H14.4V10.4H13.6zM15.2,9.6H16V10.4H15.2zM16,9.6H16.8V10.4H16zM18.4,9.6H19.2V10.4H18.4zM19.2,9.6H20V10.4H19.2zM20.8,9.6H21.6V10.4H20.8zM21.6,9.6H22.4V10.4H21.6zM22.4,9.6H23.2V10.4H22.4zM24.8,9.6H25.6V10.4H24.8zM25.6,9.6H26.4V10.4H25.6zM28,9.6H28.8V10.4H28zM28.8,9.6H29.6V10.4H28.8zM31.2,9.6H32V10.4H31.2zM33.6,9.6H34.4V10.4H33.6zM35.2,9.6H36V10.4H35.2zM4,10.4H4.8V11.2H4zM4.8,10.4H5.6V11.2H4.8zM7.2,10.4H8V11.2H7.2zM11.2,10.4H12V11.2H11.2zM12,10.4H12.8V11.2H12zM12.8,10.4H13.6V11.2H12.8zM14.4,10.4H15.2V11.2H14.4zM16.8,10.4H17.6V11.2H16.8zM18.4,10.4H19.2V11.2H18.4zM21.6,10.4H22.4V11.2H21.6zM22.4,10.4H23.2V11.2H22.4zM23.2,10.4H24V11.2H23.2zM24.8,10.4H25.6V11.2H24.8zM25.6,10.4H26.4V11.2H25.6zM28,10.4H28.8V11.2H28zM28.8,10.4H29.6V11.2H28.8zM29.6,10.4H30.4V11.2H29.6zM30.4,10.4H31.2V11.2H30.4zM31.2,10.4H32V11.2H31.2zM33.6,10.4H34.4V11.2H33.6zM4,11.2H4.8V12H4zM4.8,11.2H5.6V12H4.8zM6.4,11.2H7.2V12H6.4zM7.2,11.2H8V12H7.2zM8,11.2H8.8V12H8zM9.6,11.2H10.4V12H9.6zM12.8,11.2H13.6V12H12.8zM13.6,11.2H14.4V12H13.6zM14.4,11.2H15.2V12H14.4zM16,11.2H16.8V12H16zM16.8,11.2H17.6V12H16.8zM17.6,11.2H18.4V12H17.6zM18.4,11.2H19.2V12H18.4zM21.6,11.2H22.4V12H21.6zM22.4,11.2H23.2V12H22.4zM23.2,11.2H24V12H23.2zM24.8,11.2H25.6V12H24.8zM25.6,11.2H26.4V12H25.6zM28,11.2H28.8V12H28zM29.6,11.2H30.4V12H29.6zM30.4,11.2H31.2V12H30.4zM32,11.2H32.8V12H32zM32.8,11.2H33.6V12H32.8zM33.6,11.2H34.4V12H33.6zM35.2,11.2H36V12H35.2zM7.2,12H8V12.8H7.2zM9.6,12H10.4V12.8H9.6zM10.4,12H11.2V12.8H10.4zM11.2,12H12V12.8H11.2zM12,12H12.8V12.8H12zM13.6,12H14.4V12.8H13.6zM17.6,12H18.4V12.8H17.6zM19.2,12H20V12.8H19.2zM20.8,12H21.6V12.8H20.8zM22.4,12H23.2V12.8H22.4zM24.8,12H25.6V12.8H24.8zM25.6,12H26.4V12.8H25.6zM28,12H28.8V12.8H28zM28.8,12H29.6V12.8H28.8zM30.4,12H31.2V12.8H30.4zM32,12H32.8V12.8H32zM32.8,12H33.6V12.8H32.8zM34.4,12H35.2V12.8H34.4zM35.2,12H36V12.8H35.2zM3.2,12.8H4V13.6H3.2zM4,12.8H4.8V13.6H4zM4.8,12.8H5.6V13.6H4.8zM6.4,12.8H7.2V13.6H6.4zM7.2,12.8H8V13.6H7.2zM8,12.8H8.8V13.6H8zM8.8,12.8H9.6V13.6H8.8zM10.4,12.8H11.2V13.6H10.4zM11.2,12.8H12V13.6H11.2zM12,12.8H12.8V13.6H12zM12.8,12.8H13.6V13.6H12.8zM14.4,12.8H15.2V13.6H14.4zM15.2,12.8H16V13.6H15.2zM16,12.8H16.8V13.6H16zM16.8,12.8H17.6V13.6H16.8zM20,12.8H20.8V13.6H20zM22.4,12.8H23.2V13.6H22.4zM23.2,12.8H24V13.6H23.2zM25.6,12.8H26.4V13.6H25.6zM26.4,12.8H27.2V13.6H26.4zM30.4,12.8H31.2V13.6H30.4zM31.2,12.8H32V13.6H31.2zM5.6,13.6H6.4V14.4H5.6zM6.4,13.6H7.2V14.4H6.4zM7.2,13.6H8V14.4H7.2zM9.6,13.6H10.4V14.4H9.6zM10.4,13.6H11.2V14.4H10.4zM13.6,13.6H14.4V14.4H13.6zM15.2,13.6H16V14.4H15.2zM16,13.6H16.8V14.4H16zM16.8,13.6H17.6V14.4H16.8zM20,13.6H20.8V14.4H20zM20.8,13.6H21.6V14.4H20.8zM21.6,13.6H22.4V14.4H21.6zM22.4,13.6H23.2V14.4H22.4zM23.2,13.6H24V14.4H23.2zM24,13.6H24.8V14.4H24zM24.8,13.6H25.6V14.4H24.8zM25.6,13.6H26.4V14.4H25.6zM28.8,13.6H29.6V14.4H28.8zM30.4,13.6H31.2V14.4H30.4zM32.8,13.6H33.6V14.4H32.8zM33.6,13.6H34.4V14.4H33.6zM34.4,13.6H35.2V14.4H34.4zM3.2,14.4H4V15.2H3.2zM5.6,14.4H6.4V15.2H5.6zM8,14.4H8.8V15.2H8zM9.6,14.4H10.4V15.2H9.6zM10.4,14.4H11.2V15.2H10.4zM12,14.4H12.8V15.2H12zM14.4,14.4H15.2V15.2H14.4zM16,14.4H16.8V15.2H16zM16.8,14.4H17.6V15.2H16.8zM17.6,14.4H18.4V15.2H17.6zM18.4,14.4H19.2V15.2H18.4zM20,14.4H20.8V15.2H20zM21.6,14.4H22.4V15.2H21.6zM22.4,14.4H23.2V15.2H22.4zM23.2,14.4H24V15.2H23.2zM24.8,14.4H25.6V15.2H24.8zM26.4,14.4H27.2V15.2H26.4zM28,14.4H28.8V15.2H28zM29.6,14.4H30.4V15.2H29.6zM30.4,14.4H31.2V15.2H30.4zM31.2,14.4H32V15.2H31.2zM32,14.4H32.8V15.2H32zM33.6,14.4H34.4V15.2H33.6zM35.2,14.4H36V15.2H35.2zM3.2,15.2H4V16H3.2zM4.8,15.2H5.6V16H4.8zM7.2,15.2H8V16H7.2zM10.4,15.2H11.2V16H10.4zM13.6,15.2H14.4V16H13.6zM14.4,15.2H15.2V16H14.4zM15.2,15.2H16V16H15.2zM17.6,15.2H18.4V16H17.6zM21.6,15.2H22.4V16H21.6zM27.2,15.2H28V16H27.2zM29.6,15.2H30.4V16H29.6zM30.4,15.2H31.2V16H30.4zM31.2,15.2H32V16H31.2zM32.8,15.2H33.6V16H32.8zM35.2,15.2H36V16H35.2zM3.2,16H4V16.8H3.2zM4,16H4.8V16.8H4zM6.4,16H7.2V16.8H6.4zM7.2,16H8V16.8H7.2zM8,16H8.8V16.8H8zM8.8,16H9.6V16.8H8.8zM9.6,16H10.4V16.8H9.6zM12,16H12.8V16.8H12zM13.6,16H14.4V16.8H13.6zM14.4,16H15.2V16.8H14.4zM16.8,16H17.6V16.8H16.8zM18.4,16H19.2V16.8H18.4zM19.2,16H20V16.8H19.2zM21.6,16H22.4V16.8H21.6zM24,16H24.8V16.8H24zM27.2,16H28V16.8H27.2zM28.8,16H29.6V16.8H28.8zM29.6,16H30.4V16.8H29.6zM30.4,16H31.2V16.8H30.4zM35.2,16H36V16.8H35.2zM3.2,16.8H4V17.6H3.2zM4,16.8H4.8V17.6H4zM4.8,16.8H5.6V17.6H4.8zM6.4,16.8H7.2V17.6H6.4zM8.8,16.8H9.6V17.6H8.8zM13.6,16.8H14.4V17.6H13.6zM15.2,16.8H16V17.6H15.2zM16,16.8H16.8V17.6H16zM17.6,16.8H18.4V17.6H17.6zM19.2,16.8H20V17.6H19.2zM20,16.8H20.8V17.6H20zM21.6,16.8H22.4V17.6H21.6zM24,16.8H24.8V17.6H24zM25.6,16.8H26.4V17.6H25.6zM27.2,16.8H28V17.6H27.2zM28.8,16.8H29.6V17.6H28.8zM29.6,16.8H30.4V17.6H29.6zM30.4,16.8H31.2V17.6H30.4zM31.2,16.8H32V17.6H31.2zM35.2,16.8H36V17.6H35.2zM3.2,17.6H4V18.4H3.2zM4.8,17.6H5.6V18.4H4.8zM5.6,17.6H6.4V18.4H5.6zM8,17.6H8.8V18.4H8zM12,17.6H12.8V18.4H12zM12.8,17.6H13.6V18.4H12.8zM13.6,17.6H14.4V18.4H13.6zM14.4,17.6H15.2V18.4H14.4zM16,17.6H16.8V18.4H16zM16.8,17.6H17.6V18.4H16.8zM17.6,17.6H18.4V18.4H17.6zM18.4,17.6H19.2V18.4H18.4zM21.6,17.6H22.4V18.4H21.6zM22.4,17.6H23.2V18.4H22.4zM24.8,17.6H25.6V18.4H24.8zM26.4,17.6H27.2V18.4H26.4zM27.2,17.6H28V18.4H27.2zM28,17.6H28.8V18.4H28zM28.8,17.6H29.6V18.4H28.8zM31.2,17.6H32V18.4H31.2zM32,17.6H32.8V18.4H32zM35.2,17.6H36V18.4H35.2zM4,18.4H4.8V19.2H4zM4.8,18.4H5.6V19.2H4.8zM5.6,18.4H6.4V19.2H5.6zM6.4,18.4H7.2V19.2H6.4zM7.2,18.4H8V19.2H7.2zM9.6,18.4H10.4V19.2H9.6zM11.2,18.4H12V19.2H11.2zM12.8,18.4H13.6V19.2H12.8zM14.4,18.4H15.2V19.2H14.4zM16,18.4H16.8V19.2H16zM17.6,18.4H18.4V19.2H17.6zM18.4,18.4H19.2V19.2H18.4zM20,18.4H20.8V19.2H20zM24,18.4H24.8V19.2H24zM25.6,18.4H26.4V19.2H25.6zM27.2,18.4H28V19.2H27.2zM29.6,18.4H30.4V19.2H29.6zM30.4,18.4H31.2V19.2H30.4zM35.2,18.4H36V19.2H35.2zM3.2,19.2H4V20H3.2zM5.6,19.2H6.4V20H5.6zM7.2,19.2H8V20H7.2zM8,19.2H8.8V20H8zM8.8,19.2H9.6V20H8.8zM9.6,19.2H10.4V20H9.6zM10.4,19.2H11.2V20H10.4zM12,19.2H12.8V20H12zM12.8,19.2H13.6V20H12.8zM13.6,19.2H14.4V20H13.6zM14.4,19.2H15.2V20H14.4zM16.8,19.2H17.6V20H16.8zM17.6,19.2H18.4V20H17.6zM18.4,19.2H19.2V20H18.4zM19.2,19.2H20V20H19.2zM20,19.2H20.8V20H20zM21.6,19.2H22.4V20H21.6zM22.4,19.2H23.2V20H22.4zM27.2,19.2H28V20H27.2zM30.4,19.2H31.2V20H30.4zM32,19.2H32.8V20H32zM34.4,19.2H35.2V20H34.4zM35.2,19.2H36V20H35.2zM3.2,20H4V20.8H3.2zM4,20H4.8V20.8H4zM4.8,20H5.6V20.8H4.8zM7.2,20H8V20.8H7.2zM8.8,20H9.6V20.8H8.8zM9.6,20H10.4V20.8H9.6zM10.4,20H11.2V20.8H10.4zM11.2,20H12V20.8H11.2zM12,20H12.8V20.8H12zM12.8,20H13.6V20.8H12.8zM16,20H16.8V20.8H16zM17.6,20H18.4V20.8H17.6zM19.2,20H20V20.8H19.2zM20,20H20.8V20.8H20zM21.6,20H22.4V20.8H21.6zM22.4,20H23.2V20.8H22.4zM23.2,20H24V20.8H23.2zM25.6,20H26.4V20.8H25.6zM26.4,20H27.2V20.8H26.4zM28,20H28.8V20.8H28zM30.4,20H31.2V20.8H30.4zM31.2,20H32V20.8H31.2zM32.8,20H33.6V20.8H32.8zM33.6,20H34.4V20.8H33.6zM35.2,20H36V20.8H35.2zM3.2,20.8H4V21.6H3.2zM4.8,20.8H5.6V21.6H4.8zM7.2,20.8H8V21.6H7.2zM8,20.8H8.8V21.6H8zM8.8,20.8H9.6V21.6H8.8zM9.6,20.8H10.4V21.6H9.6zM10.4,20.8H11.2V21.6H10.4zM11.2,20.8H12V21.6H11.2zM14.4,20.8H15.2V21.6H14.4zM15.2,20.8H16V21.6H15.2zM16,20.8H16.8V21.6H16zM18.4,20.8H19.2V21.6H18.4zM19.2,20.8H20V21.6H19.2zM21.6,20.8H22.4V21.6H21.6zM24.8,20.8H25.6V21.6H24.8zM25.6,20.8H26.4V21.6H25.6zM28,20.8H28.8V21.6H28zM29.6,20.8H30.4V21.6H29.6zM32.8,20.8H33.6V21.6H32.8zM35.2,20.8H36V21.6H35.2zM3.2,21.6H4V22.4H3.2zM8.8,21.6H9.6V22.4H8.8zM9.6,21.6H10.4V22.4H9.6zM10.4,21.6H11.2V22.4H10.4zM11.2,21.6H12V22.4H11.2zM12,21.6H12.8V22.4H12zM13.6,21.6H14.4V22.4H13.6zM16,21.6H16.8V22.4H16zM18.4,21.6H19.2V22.4H18.4zM19.2,21.6H20V22.4H19.2zM24,21.6H24.8V22.4H24zM27.2,21.6H28V22.4H27.2zM28,21.6H28.8V22.4H28zM28.8,21.6H29.6V22.4H28.8zM32.8,21.6H33.6V22.4H32.8zM34.4,21.6H35.2V22.4H34.4zM35.2,21.6H36V22.4H35.2zM4.8,22.4H5.6V23.2H4.8zM6.4,22.4H7.2V23.2H6.4zM7.2,22.4H8V23.2H7.2zM8,22.4H8.8V23.2H8zM8.8,22.4H9.6V23.2H8.8zM9.6,22.4H10.4V23.2H9.6zM13.6,22.4H14.4V23.2H13.6zM14.4,22.4H15.2V23.2H14.4zM16,22.4H16.8V23.2H16zM18.4,22.4H19.2V23.2H18.4zM19.2,22.4H20V23.2H19.2zM22.4,22.4H23.2V23.2H22.4zM24.8,22.4H25.6V23.2H24.8zM25.6,22.4H26.4V23.2H25.6zM28.8,22.4H29.6V23.2H28.8zM29.6,22.4H30.4V23.2H29.6zM30.4,22.4H31.2V23.2H30.4zM34.4,22.4H35.2V23.2H34.4zM35.2,22.4H36V23.2H35.2zM3.2,23.2H4V24H3.2zM4.8,23.2H5.6V24H4.8zM5.6,23.2H6.4V24H5.6zM7.2,23.2H8V24H7.2zM8.8,23.2H9.6V24H8.8zM10.4,23.2H11.2V24H10.4zM12.8,23.2H13.6V24H12.8zM15.2,23.2H16V24H15.2zM16,23.2H16.8V24H16zM16.8,23.2H17.6V24H16.8zM18.4,23.2H19.2V24H18.4zM19.2,23.2H20V24H19.2zM21.6,23.2H22.4V24H21.6zM22.4,23.2H23.2V24H22.4zM24.8,23.2H25.6V24H24.8zM28,23.2H28.8V24H28zM30.4,23.2H31.2V24H30.4zM32.8,23.2H33.6V24H32.8zM34.4,23.2H35.2V24H34.4zM4.8,24H5.6V24.8H4.8zM5.6,24H6.4V24.8H5.6zM6.4,24H7.2V24.8H6.4zM7.2,24H8V24.8H7.2zM8,24H8.8V24.8H8zM8.8,24H9.6V24.8H8.8zM9.6,24H10.4V24.8H9.6zM10.4,24H11.2V24.8H10.4zM12.8,24H13.6V24.8H12.8zM13.6,24H14.4V24.8H13.6zM15.2,24H16V24.8H15.2zM17.6,24H18.4V24.8H17.6zM18.4,24H19.2V24.8H18.4zM20.8,24H21.6V24.8H20.8zM21.6,24H22.4V24.8H21.6zM24,24H24.8V24.8H24zM24.8,24H25.6V24.8H24.8zM26.4,24H27.2V24.8H26.4zM27.2,24H28V24.8H27.2zM28,24H28.8V24.8H28zM30.4,24H31.2V24.8H30.4zM32.8,24H33.6V24.8H32.8zM33.6,24H34.4V24.8H33.6zM35.2,24H36V24.8H35.2zM3.2,24.8H4V25.6H3.2zM4,24.8H4.8V25.6H4zM4.8,24.8H5.6V25.6H4.8zM8.8,24.8H9.6V25.6H8.8zM9.6,24.8H10.4V25.6H9.6zM12,24.8H12.8V25.6H12zM12.8,24.8H13.6V25.6H12.8zM13.6,24.8H14.4V25.6H13.6zM16,24.8H16.8V25.6H16zM18.4,24.8H19.2V25.6H18.4zM19.2,24.8H20V25.6H19.2zM21.6,24.8H22.4V25.6H21.6zM22.4,24.8H23.2V25.6H22.4zM24,24.8H24.8V25.6H24zM24.8,24.8H25.6V25.6H24.8zM27.2,24.8H28V25.6H27.2zM28,24.8H28.8V25.6H28zM28.8,24.8H29.6V25.6H28.8zM31.2,24.8H32V25.6H31.2zM32.8,24.8H33.6V25.6H32.8zM34.4,24.8H35.2V25.6H34.4zM3.2,25.6H4V26.4H3.2zM4,25.6H4.8V26.4H4zM6.4,25.6H7.2V26.4H6.4zM8,25.6H8.8V26.4H8zM8.8,25.6H9.6V26.4H8.8zM9.6,25.6H10.4V26.4H9.6zM12,25.6H12.8V26.4H12zM15.2,25.6H16V26.4H15.2zM17.6,25.6H18.4V26.4H17.6zM19.2,25.6H20V26.4H19.2zM21.6,25.6H22.4V26.4H21.6zM24.8,25.6H25.6V26.4H24.8zM25.6,25.6H26.4V26.4H25.6zM26.4,25.6H27.2V26.4H26.4zM29.6,25.6H30.4V26.4H29.6zM30.4,25.6H31.2V26.4H30.4zM31.2,25.6H32V26.4H31.2zM4,26.4H4.8V27.2H4zM6.4,26.4H7.2V27.2H6.4zM8.8,26.4H9.6V27.2H8.8zM9.6,26.4H10.4V27.2H9.6zM12,26.4H12.8V27.2H12zM13.6,26.4H14.4V27.2H13.6zM14.4,26.4H15.2V27.2H14.4zM17.6,26.4H18.4V27.2H17.6zM19.2,26.4H20V27.2H19.2zM20,26.4H20.8V27.2H20zM21.6,26.4H22.4V27.2H21.6zM22.4,26.4H23.2V27.2H22.4zM24.8,26.4H25.6V27.2H24.8zM25.6,26.4H26.4V27.2H25.6zM28,26.4H28.8V27.2H28zM29.6,26.4H30.4V27.2H29.6zM30.4,26.4H31.2V27.2H30.4zM31.2,26.4H32V27.2H31.2zM34.4,26.4H35.2V27.2H34.4zM35.2,26.4H36V27.2H35.2zM3.2,27.2H4V28H3.2zM4,27.2H4.8V28H4zM4.8,27.2H5.6V28H4.8zM5.6,27.2H6.4V28H5.6zM6.4,27.2H7.2V28H6.4zM7.2,27.2H8V28H7.2zM8,27.2H8.8V28H8zM8.8,27.2H9.6V28H8.8zM9.6,27.2H10.4V28H9.6zM10.4,27.2H11.2V28H10.4zM12,27.2H12.8V28H12zM12.8,27.2H13.6V28H12.8zM13.6,27.2H14.4V28H13.6zM14.4,27.2H15.2V28H14.4zM16,27.2H16.8V28H16zM19.2,27.2H20V28H19.2zM20,27.2H20.8V28H20zM21.6,27.2H22.4V28H21.6zM24.8,27.2H25.6V28H24.8zM25.6,27.2H26.4V28H25.6zM26.4,27.2H27.2V28H26.4zM28,27.2H28.8V28H28zM29.6,27.2H30.4V28H29.6zM34.4,27.2H35.2V28H34.4zM35.2,27.2H36V28H35.2zM7.2,28H8V28.8H7.2zM10.4,28H11.2V28.8H10.4zM12.8,28H13.6V28.8H12.8zM15.2,28H16V28.8H15.2zM16,28H16.8V28.8H16zM18.4,28H19.2V28.8H18.4zM19.2,28H20V28.8H19.2zM21.6,28H22.4V28.8H21.6zM22.4,28H23.2V28.8H22.4zM24.8,28H25.6V28.8H24.8zM25.6,28H26.4V28.8H25.6zM27.2,28H28V28.8H27.2zM28,28H28.8V28.8H28zM30.4,28H31.2V28.8H30.4zM31.2,28H32V28.8H31.2zM32,28H32.8V28.8H32zM3.2,28.8H4V29.6H3.2zM4,28.8H4.8V29.6H4zM5.6,28.8H6.4V29.6H5.6zM6.4,28.8H7.2V29.6H6.4zM8,28.8H8.8V29.6H8zM9.6,28.8H10.4V29.6H9.6zM12,28.8H12.8V29.6H12zM12.8,28.8H13.6V29.6H12.8zM16,28.8H16.8V29.6H16zM19.2,28.8H20V29.6H19.2zM24,28.8H24.8V29.6H24zM24.8,28.8H25.6V29.6H24.8zM25.6,28.8H26.4V29.6H25.6zM26.4,28.8H27.2V29.6H26.4zM28,28.8H28.8V29.6H28zM28.8,28.8H29.6V29.6H28.8zM29.6,28.8H30.4V29.6H29.6zM30.4,28.8H31.2V29.6H30.4zM31.2,28.8H32V29.6H31.2zM32,28.8H32.8V29.6H32zM32.8,28.8H33.6V29.6H32.8zM34.4,28.8H35.2V29.6H34.4zM9.6,29.6H10.4V30.4H9.6zM11.2,29.6H12V30.4H11.2zM12,29.6H12.8V30.4H12zM12.8,29.6H13.6V30.4H12.8zM16.8,29.6H17.6V30.4H16.8zM18.4,29.6H19.2V30.4H18.4zM19.2,29.6H20V30.4H19.2zM20.8,29.6H21.6V30.4H20.8zM22.4,29.6H23.2V30.4H22.4zM24,29.6H24.8V30.4H24zM24.8,29.6H25.6V30.4H24.8zM25.6,29.6H26.4V30.4H25.6zM26.4,29.6H27.2V30.4H26.4zM27.2,29.6H28V30.4H27.2zM28,29.6H28.8V30.4H28zM28.8,29.6H29.6V30.4H28.8zM32,29.6H32.8V30.4H32zM34.4,29.6H35.2V30.4H34.4zM35.2,29.6H36V30.4H35.2zM3.2,30.4H4V31.2H3.2zM4,30.4H4.8V31.2H4zM4.8,30.4H5.6V31.2H4.8zM5.6,30.4H6.4V31.2H5.6zM6.4,30.4H7.2V31.2H6.4zM7.2,30.4H8V31.2H7.2zM8,30.4H8.8V31.2H8zM9.6,30.4H10.4V31.2H9.6zM10.4,30.4H11.2V31.2H10.4zM12,30.4H12.8V31.2H12zM15.2,30.4H16V31.2H15.2zM16,30.4H16.8V31.2H16zM18.4,30.4H19.2V31.2H18.4zM20,30.4H20.8V31.2H20zM20.8,30.4H21.6V31.2H20.8zM21.6,30.4H22.4V31.2H21.6zM22.4,30.4H23.2V31.2H22.4zM24.8,30.4H25.6V31.2H24.8zM28.8,30.4H29.6V31.2H28.8zM30.4,30.4H31.2V31.2H30.4zM32,30.4H32.8V31.2H32zM32.8,30.4H33.6V31.2H32.8zM35.2,30.4H36V31.2H35.2zM3.2,31.2H4V32H3.2zM8,31.2H8.8V32H8zM10.4,31.2H11.2V32H10.4zM12,31.2H12.8V32H12zM16.8,31.2H17.6V32H16.8zM19.2,31.2H20V32H19.2zM20.8,31.2H21.6V32H20.8zM22.4,31.2H23.2V32H22.4zM27.2,31.2H28V32H27.2zM28,31.2H28.8V32H28zM28.8,31.2H29.6V32H28.8zM32,31.2H32.8V32H32zM32.8,31.2H33.6V32H32.8zM34.4,31.2H35.2V32H34.4zM35.2,31.2H36V32H35.2zM3.2,32H4V32.8H3.2zM4.8,32H5.6V32.8H4.8zM5.6,32H6.4V32.8H5.6zM6.4,32H7.2V32.8H6.4zM8,32H8.8V32.8H8zM11.2,32H12V32.8H11.2zM12,32H12.8V32.8H12zM13.6,32H14.4V32.8H13.6zM15.2,32H16V32.8H15.2zM16,32H16.8V32.8H16zM16.8,32H17.6V32.8H16.8zM18.4,32H19.2V32.8H18.4zM19.2,32H20V32.8H19.2zM20,32H20.8V32.8H20zM20.8,32H21.6V32.8H20.8zM21.6,32H22.4V32.8H21.6zM22.4,32H23.2V32.8H22.4zM28,32H28.8V32.8H28zM28.8,32H29.6V32.8H28.8zM29.6,32H30.4V32.8H29.6zM30.4,32H31.2V32.8H30.4zM31.2,32H32V32.8H31.2zM32,32H32.8V32.8H32zM3.2,32.8H4V33.6H3.2zM4.8,32.8H5.6V33.6H4.8zM5.6,32.8H6.4V33.6H5.6zM6.4,32.8H7.2V33.6H6.4zM8,32.8H8.8V33.6H8zM10.4,32.8H11.2V33.6H10.4zM11.2,32.8H12V33.6H11.2zM13.6,32.8H14.4V33.6H13.6zM14.4,32.8H15.2V33.6H14.4zM16.8,32.8H17.6V33.6H16.8zM18.4,32.8H19.2V33.6H18.4zM19.2,32.8H20V33.6H19.2zM20.8,32.8H21.6V33.6H20.8zM22.4,32.8H23.2V33.6H22.4zM23.2,32.8H24V33.6H23.2zM24.8,32.8H25.6V33.6H24.8zM25.6,32.8H26.4V33.6H25.6zM27.2,32.8H28V33.6H27.2zM28,32.8H28.8V33.6H28zM31.2,32.8H32V33.6H31.2zM32,32.8H32.8V33.6H32zM32.8,32.8H33.6V33.6H32.8zM35.2,32.8H36V33.6H35.2zM3.2,33.6H4V34.4H3.2zM4.8,33.6H5.6V34.4H4.8zM5.6,33.6H6.4V34.4H5.6zM6.4,33.6H7.2V34.4H6.4zM8,33.6H8.8V34.4H8zM9.6,33.6H10.4V34.4H9.6zM10.4,33.6H11.2V34.4H10.4zM12.8,33.6H13.6V34.4H12.8zM15.2,33.6H16V34.4H15.2zM16.8,33.6H17.6V34.4H16.8zM18.4,33.6H19.2V34.4H18.4zM19.2,33.6H20V34.4H19.2zM20.8,33.6H21.6V34.4H20.8zM21.6,33.6H22.4V34.4H21.6zM24.8,33.6H25.6V34.4H24.8zM27.2,33.6H28V34.4H27.2zM29.6,33.6H30.4V34.4H29.6zM32,33.6H32.8V34.4H32zM32.8,33.6H33.6V34.4H32.8zM33.6,33.6H34.4V34.4H33.6zM35.2,33.6H36V34.4H35.2zM3.2,34.4H4V35.2H3.2zM8,34.4H8.8V35.2H8zM10.4,34.4H11.2V35.2H10.4zM11.2,34.4H12V35.2H11.2zM14.4,34.4H15.2V35.2H14.4zM15.2,34.4H16V35.2H15.2zM16,34.4H16.8V35.2H16zM16.8,34.4H17.6V35.2H16.8zM19.2,34.4H20V35.2H19.2zM20.8,34.4H21.6V35.2H20.8zM22.4,34.4H23.2V35.2H22.4zM24,34.4H24.8V35.2H24zM27.2,34.4H28V35.2H27.2zM28.8,34.4H29.6V35.2H28.8zM29.6,34.4H30.4V35.2H29.6zM32.8,34.4H33.6V35.2H32.8zM3.2,35.2H4V36H3.2zM4,35.2H4.8V36H4zM4.8,35.2H5.6V36H4.8zM5.6,35.2H6.4V36H5.6zM6.4,35.2H7.2V36H6.4zM7.2,35.2H8V36H7.2zM8,35.2H8.8V36H8zM9.6,35.2H10.4V36H9.6zM12,35.2H12.8V36H12zM13.6,35.2H14.4V36H13.6zM14.4,35.2H15.2V36H14.4zM15.2,35.2H16V36H15.2zM16,35.2H16.8V36H16zM16.8,35.2H17.6V36H16.8zM17.6,35.2H18.4V36H17.6zM18.4,35.2H19.2V36H18.4zM19.2,35.2H20V36H19.2zM21.6,35.2H22.4V36H21.6zM22.4,35.2H23.2V36H22.4zM28,35.2H28.8V36H28zM28.8,35.2H29.6V36H28.8zM30.4,35.2H31.2V36H30.4zM32,35.2H32.8V36H32zM32.8,35.2H33.6V36H32.8zM33.6,35.2H34.4V36H33.6zM35.2,35.2H36V36H35.2z" id="qr-path" fill="#000000" fill-opacity="1" fill-rule="nonzero" stroke="none"/></svg>'</div>
+        <p class="small" style="text-align:center;margin:10px 0 0">📱 Arahkan kamera HP ke QR Code</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px;background:#0b1d40">
+    <h3>👩‍🏫 Untuk Ibu/Bapak Guru</h3>
+    <p class="lead" style="margin-bottom:0">Semua respons siswa terkumpul otomatis di Google Sheets yang terhubung dengan Form. Dari sana, hasil kelas dapat digunakan untuk melihat perasaan siswa, bagian yang paling dipahami, dan bagian yang masih perlu dilatih.</p>
+  </div>
+
+  <div class="actions">
+    <button class="btn ghost" onclick="show('home')">🏠 Kembali ke Beranda</button>
+    <button class="btn danger" onclick="restart()">🔄 Mulai Lagi</button>
+  </div>
+</section>
+</main>
+<div class="footer">Petualangan Bilangan • Matematika Kelas 4 • Komposisi & Dekomposisi Bilangan sampai 10.000 • Offline-ready</div>
+</div>
+
+<script>
+const screens=[...document.querySelectorAll('.screen')];
+let score=0,current=0,answered=false,selectedEmotion='';
+
+const questions=[
+ {q:'Siapakah siswa kelas 4 yang suka membaca buku di perpustakaan SDN Grujugan Lor 2?',o:['Dela dan Rita','Dela dan Rina','Rita dan Rani','Rani dan Sinta'],a:'Dela dan Rita'},
+ {q:'Di manakah letak perpustakaan SDN Grujugan Lor 2?',o:['Di sebelah kiri ruang Kepala Sekolah','Di sebelah kanan ruang Kepala Sekolah','Di depan ruang guru','Di samping ruang kelas 4'],a:'Di sebelah kanan ruang Kepala Sekolah'},
+ {q:'Berdasarkan teks, koleksi buku yang jumlahnya paling banyak adalah ...',o:['Buku fabel','Buku pelajaran','Buku ensiklopedia','Buku komik edukasi'],a:'Buku ensiklopedia'},
+ {q:'Berdasarkan teks, koleksi yang jumlahnya paling sedikit adalah ...',o:['Buku komik edukasi','Majalah anak','Buku fabel','Buku pelajaran'],a:'Majalah anak'},
+ {q:'Urutan koleksi dari jumlah terbanyak ke paling sedikit yang benar adalah ...',o:['Ensiklopedia, buku pelajaran, fabel, komik edukasi, majalah anak','Buku pelajaran, ensiklopedia, komik edukasi, fabel, majalah anak','Ensiklopedia, fabel, buku pelajaran, majalah anak, komik edukasi','Majalah anak, komik edukasi, fabel, buku pelajaran, ensiklopedia'],a:'Ensiklopedia, buku pelajaran, fabel, komik edukasi, majalah anak'},
+ {q:'Di rak A terdapat 1.245 buku fabel. Bentuk dekomposisi bilangan 1.245 adalah ...',o:['1.000 + 200 + 40 + 5','1.000 + 20 + 40 + 5','1.000 + 200 + 4 + 5','100 + 200 + 40 + 5'],a:'1.000 + 200 + 40 + 5'},
+ {q:'Di rak B terdapat 2.378 buku pelajaran. Bentuk komposisi bilangan 2.378 adalah ...',o:['2.000 + 300 + 70 + 8','2.000 + 30 + 700 + 8','2.000 + 300 + 7 + 8','200 + 300 + 70 + 8'],a:'2.000 + 300 + 70 + 8'},
+ {q:'Petugas perpustakaan mencatat bilangan 2.000 + 300 + 8. Bilangan yang terbentuk adalah ...',o:['2.038','2.308','2.380','2.803'],a:'2.308'}
+];
+
+function show(id){
+  screens.forEach(s=>s.classList.remove('active'));
+  const target=document.getElementById(id);
+  if(!target)return;
+  target.classList.add('active');
+  document.querySelectorAll('.dash-btn').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  document.querySelectorAll('.dash-btn').forEach(b=>b.classList.remove('done'));
+  if(['mission2','mission3','game','win','reflection'].includes(id)) document.querySelector('.dash-btn[data-page="mission1"]')?.classList.add('done');
+  if(['mission3','game','win','reflection'].includes(id)) document.querySelector('.dash-btn[data-page="mission2"]')?.classList.add('done');
+  if(['game','win','reflection'].includes(id)) document.querySelector('.dash-btn[data-page="mission3"]')?.classList.add('done');
+  if(['win','reflection'].includes(id)) document.querySelector('.dash-btn[data-page="game"]')?.classList.add('done');
+  document.getElementById('stage').textContent=
+    ({home:'Pembuka',opening:'Apersepsi',roles:'Kelompok',mission1:'Misi 1',mission2:'Misi 2',mission3:'Misi 3',game:'Game Arena',win:'Selesai',reflection:'Refleksi'})[id]||'Belajar';
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='mission1'){
+    const s=document.querySelector('.composition-stage');s.classList.remove('assembled');
+    document.getElementById('compResult').style.opacity='0';
+    document.getElementById('compLabel').textContent='Bagian bilangan siap disatukan...';
+    updateComposition();
+  }
+  if(id==='mission2'){
+    const s=document.querySelector('.decomposition-stage');s.classList.remove('scattered');
+    document.getElementById('decompLabel').textContent='Bilangan utuh: 8.756';
+  }
+  if(id==='mission3')loadQuestion();
+}
+
+function updateStats(){score=Math.max(0,Math.min(100,score));document.getElementById('score').textContent=score}
+
+function checkOpening(){
+  const input=document.getElementById('openingAnswer');
+  const fb=document.getElementById('openingFeedback');
+  const raw=input.value.trim().replace(/\s/g,'').replace(/rp/gi,'').replace(/\./g,'').replace(/,/g,'');
+  if(!raw){
+    fb.textContent='✏️ Silakan ketik jawabanmu terlebih dahulu.';
+    fb.className='feedback bad';
+    input.focus();
+    return;
+  }
+  if(raw==='4500'){
+    fb.textContent='🎉 Benar! Rp4.000 + Rp500 = Rp4.500. Saat bagian-bagian digabungkan menjadi satu bilangan, kita mengenal proses ini sebagai komposisi.';
+    fb.className='feedback good';
+  }else{
+    fb.textContent='💡 Belum tepat. Coba hitung kembali Rp4.000 + Rp500. Diskusikan dengan kelompokmu lalu coba lagi.';
+    fb.className='feedback bad';
+  }
+}
+
+
+function formatNumberID(n){
+  return Number(n||0).toLocaleString('id-ID');
+}
+function getCompositionValues(){
+  return [
+    Number(document.getElementById('thousandsInput')?.value || 0),
+    Number(document.getElementById('hundredsInput')?.value || 0),
+    Number(document.getElementById('tensInput')?.value || 0),
+    Number(document.getElementById('onesInput')?.value || 0)
+  ];
+}
+function updateComposition(){
+  const [th,h,te,o]=getCompositionValues();
+  const total=th+h+te+o;
+  const values=[th,h,te,o].map(formatNumberID);
+  document.getElementById('compositionExpression').textContent=values.join(' + ');
+  document.getElementById('compositionTotal').textContent=formatNumberID(total);
+  document.getElementById('receiptThousands').textContent=formatNumberID(th);
+  document.getElementById('receiptHundreds').textContent=formatNumberID(h);
+  document.getElementById('receiptTens').textContent=formatNumberID(te);
+  document.getElementById('receiptOnes').textContent=formatNumberID(o);
+  document.getElementById('puzzleEquation').textContent=values.join(' + ');
+  document.getElementById('compResult').textContent='= '+formatNumberID(total);
+  const cfb=document.getElementById('compositionFeedback');
+  if(total===2425 && th===2000 && h===400 && te===20 && o===5){
+    cfb.innerHTML='<strong>🧠 Tepat!</strong> 2.000 + 400 + 20 + 5 = 2.425. Kamu menggabungkan nilai ribuan, ratusan, puluhan, dan satuan menjadi bilangan utuh.';
+  }else if(total===2425){
+    cfb.innerHTML='<strong>✨ Bilangannya tetap 2.425!</strong> Kamu menemukan susunan bagian yang jumlahnya sama. Perhatikan nilai tempat setiap bagian.';
+  }else{
+    cfb.innerHTML='<strong>🔎 Perhatikan hasilnya:</strong> bagian-bagian yang kamu masukkan sekarang membentuk <b>'+formatNumberID(total)+'</b>. Komposisi adalah menggabungkan bagian-bagian menjadi satu bilangan.';
+  }
+
+  // Keep the visual puzzle pieces synchronized with the values entered.
+  const pieces=document.querySelectorAll('.composition-stage .piece');
+  if(pieces.length>=4){
+    pieces[0].textContent=values[0];
+    pieces[1].textContent=values[1];
+    pieces[2].textContent=values[2];
+    pieces[3].textContent=values[3];
+  }
+}
+function resetCompositionInputs(){
+  document.getElementById('thousandsInput').value=2000;
+  document.getElementById('hundredsInput').value=400;
+  document.getElementById('tensInput').value=20;
+  document.getElementById('onesInput').value=5;
+  updateComposition();
+}
+function setupCompositionInputs(){
+  ['thousandsInput','hundredsInput','tensInput','onesInput'].forEach(id=>{
+    document.getElementById(id)?.addEventListener('input',updateComposition);
+  });
+  updateComposition();
+}
+
+function playComposition(){
+  updateComposition();
+  const s=document.querySelector('.composition-stage');
+  s.classList.remove('assembled');document.getElementById('compResult').style.opacity='0';
+  setTimeout(()=>{
+    s.classList.add('assembled');
+    document.getElementById('compLabel').textContent='✨ Semua bagian bergabung menjadi bilangan utuh!';
+    document.getElementById('compResult').style.opacity='1';
+  },250);
+}
+
+function playDecomposition(){
+  const s=document.querySelector('.decomposition-stage');
+  s.classList.remove('scattered');document.getElementById('decompLabel').textContent='Bilangan utuh: 8.756';
+  setTimeout(()=>{
+    s.classList.add('scattered');
+    document.getElementById('decompLabel').textContent='✨ 8.756 terurai menurut nilai tempat!';
+  },300);
+}
+
+function resetDrops(){
+  const source=document.getElementById('pieces');
+  document.querySelectorAll('.draggable').forEach(x=>source.appendChild(x));
+  document.querySelectorAll('.drop-zone').forEach(z=>{
+    z.classList.remove('correct','wrong','over');
+    z.querySelectorAll('.draggable').forEach(x=>document.getElementById('pieces').appendChild(x));
+  });
+  document.getElementById('dropFeedback').textContent='';
+}
+function checkDrops(){
+  let ok=0;
+  document.querySelectorAll('.drop-zone').forEach(z=>{
+    const item=z.querySelector('.draggable');
+    z.classList.remove('correct','wrong');
+    if(item && item.dataset.place===z.dataset.place){ok++;z.classList.add('correct')}
+    else z.classList.add('wrong');
+  });
+  const fb=document.getElementById('dropFeedback');
+  if(ok===4){
+    fb.textContent='🎉 Tepat! 8.756 = 8.000 + 700 + 50 + 6. Kamu sudah menguraikan bilangan berdasarkan nilai tempat.';
+    fb.className='feedback good';
+  }else{
+    fb.textContent=`💡 Baru ${ok}/4 yang tepat. Perhatikan kembali ribuan, ratusan, puluhan, dan satuan.`;
+    fb.className='feedback bad';
+  }
+}
+
+document.querySelectorAll('.draggable').forEach(item=>{
+  item.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',item.dataset.value));
+});
+document.querySelectorAll('.drop-zone').forEach(zone=>{
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over')});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.classList.remove('over');
+    const value=e.dataTransfer.getData('text/plain');
+    const item=[...document.querySelectorAll('.draggable')].find(x=>x.dataset.value===value);
+    if(item){
+      const old=item.parentElement;
+      if(old && old.classList.contains('drop-zone')) old.classList.remove('correct','wrong');
+      zone.querySelectorAll('.draggable').forEach(x=>document.getElementById('pieces').appendChild(x));
+      zone.appendChild(item);
+    }
+  });
+});
+
+let teamScores = [0, 0, 0];
+let selectedTeamAnswers=[null,null,null];
+let questionWon = false;
+let attemptedTeams = new Set();
+
+function updateTeamScores(){
+  [1,2,3].forEach(n=>{
+    document.getElementById('scoreTeam'+n).textContent=teamScores[n-1];
+  });
+  score=Math.max(0,Math.min(100,teamScores.reduce((a,b)=>a+b,0)));
+  document.getElementById('score').textContent=score;
+}
+function setTeamFeedback(team,message,type=''){
+  const el=document.getElementById('teamFeedback'+team);
+  el.textContent=message;
+  el.className='team-feedback'+(type?' '+type:'');
+}
+function renderTeamOptions(team, q){
+  const container=document.getElementById('teamOptions'+team);
+  container.replaceChildren();
+  q.o.forEach((option,index)=>{
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='team-option';
+    button.dataset.option=option;
+    button.innerHTML='<span class="option-letter">'+String.fromCharCode(65+index)+'</span><span></span>';
+    button.querySelector('span:last-child').textContent=option;
+    button.setAttribute('aria-pressed','false');
+    button.onclick=()=>selectTeamOption(team,option,button);
+    container.appendChild(button);
+  });
+}
+function selectTeamOption(team, option, button){
+  if(questionWon || attemptedTeams.has(team)) return;
+  selectedTeamAnswers[team-1]=option;
+  document.querySelectorAll('#teamOptions'+team+' .team-option').forEach(opt=>{
+    opt.classList.toggle('selected',opt===button);
+    opt.setAttribute('aria-pressed',opt===button?'true':'false');
+  });
+  setTeamFeedback(team,'Pilihan '+String.fromCharCode(65+questions[current].o.indexOf(option))+' dipilih. Tekan “Kirim Jawaban” untuk mengunci jawaban.');
+}
+function loadQuestion(){
+  if(current>=questions.length){finish();return}
+  answered=false;
+  questionWon=false;
+  attemptedTeams=new Set();
+  selectedTeamAnswers=[null,null,null];
+  const q=questions[current];
+  document.getElementById('qnum').textContent=current+1;
+  const pct=(current/questions.length*100);
+  document.getElementById('progress').style.width=pct+'%';
+  document.getElementById('mission3Progress').style.width=pct+'%';
+  document.getElementById('mission3Label').textContent='Misi 3 • Soal '+(current+1)+' dari '+questions.length;
+  document.getElementById('question').textContent=q.q;
+  document.getElementById('feedback').textContent='✨ Ketiga kelompok siap? Baca soal dan pilih A, B, C, atau D!';
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('nextBtn').style.display='none';
+  [1,2,3].forEach(n=>{
+    renderTeamOptions(n,q);
+    const button=document.getElementById('submitTeam'+n);
+    const card=document.querySelector(n===1?'.team-one-card':n===2?'.team-two-card':'.team-three-card');
+    button.disabled=false;
+    button.textContent='Kirim Jawaban';
+    card.classList.remove('winner','locked');
+    setTeamFeedback(n,'Pilih salah satu opsi A, B, C, atau D.');
+  });
+}
+function submitTeamAnswer(team){
+  if(questionWon || attemptedTeams.has(team)) return;
+  const button=document.getElementById('submitTeam'+team);
+  const response=selectedTeamAnswers[team-1];
+  if(response===null){
+    setTeamFeedback(team,'Pilih opsi A, B, C, atau D terlebih dahulu.','bad');
+    return;
+  }
+  attemptedTeams.add(team);
+  const q=questions[current];
+  const correct=response===q.a;
+  const choiceIndex=q.o.indexOf(response);
+  const choiceLetter=String.fromCharCode(65+choiceIndex);
+  if(correct){
+    questionWon=true;
+    teamScores[team-1]+=20;
+    updateTeamScores();
+    setTeamFeedback(team,'🎉 Benar! Kelompok ini memenangkan soal dan mendapat 20 poin.','good');
+    const card=document.querySelector(team===1?'.team-one-card':team===2?'.team-two-card':'.team-three-card');
+    card.classList.add('winner');
+    document.getElementById('feedback').textContent='🏆 Soal dimenangkan Kelompok '+team+'! Jawaban benar: '+choiceLetter+'. '+q.a+'. Soal sekarang terkunci.';
+    document.getElementById('feedback').className='feedback good';
+    [1,2,3].forEach(n=>{
+      document.querySelectorAll('#teamOptions'+n+' .team-option').forEach(opt=>{
+        opt.disabled=true;
+        if(opt.dataset.option===q.a) opt.classList.add('correct-choice');
+      });
+      document.getElementById('submitTeam'+n).disabled=true;
+      if(n!==team){
+        document.querySelector(n===1?'.team-one-card':n===2?'.team-two-card':'.team-three-card').classList.add('locked');
+        setTeamFeedback(n,'Soal sudah dimenangkan Kelompok '+team+'.');
+      }
+    });
+    document.getElementById('nextBtn').style.display='inline-block';
+  }else{
+    setTeamFeedback(team,'Belum tepat. Kelompok lain masih boleh mencoba.','bad');
+    document.querySelectorAll('#teamOptions'+team+' .team-option').forEach(opt=>opt.disabled=true);
+    button.disabled=true;
+    button.textContent='Sudah Menjawab';
+    document.getElementById('feedback').textContent='💡 Pilihan Kelompok '+team+' belum tepat. Soal tetap terbuka untuk kelompok lain.';
+    document.getElementById('feedback').className='feedback bad';
+    if(attemptedTeams.size===3){
+      document.getElementById('feedback').textContent='Semua kelompok sudah mencoba. Jawaban yang benar: '+q.a+'. Lanjutkan ke soal berikutnya.';
+      document.getElementById('nextBtn').style.display='inline-block';
+      [1,2,3].forEach(n=>document.querySelectorAll('#teamOptions'+n+' .team-option').forEach(opt=>{
+        opt.disabled=true;
+        if(opt.dataset.option===q.a) opt.classList.add('correct-choice');
+      }));
+    }
+  }
+}
+function resetCurrentQuestion(){
+  if(questionWon){
+    document.getElementById('feedback').textContent='Soal ini sudah dimenangkan. Lanjutkan ke soal berikutnya agar poin tetap adil.';
+    document.getElementById('feedback').className='feedback';
+    return;
+  }
+  attemptedTeams.forEach(team=>{
+    document.getElementById('submitTeam'+team).disabled=false;
+    document.getElementById('submitTeam'+team).textContent='Kirim Jawaban';
+  });
+  attemptedTeams.clear();
+  selectedTeamAnswers=[null,null,null];
+  [1,2,3].forEach(n=>{
+    document.querySelectorAll('#teamOptions'+n+' .team-option').forEach(opt=>{
+      opt.disabled=false;
+      opt.classList.remove('selected','correct-choice');
+      opt.setAttribute('aria-pressed','false');
+    });
+    setTeamFeedback(n,'Pilih salah satu opsi A, B, C, atau D.');
+  });
+  document.getElementById('feedback').textContent='Pilihan direset. Ketiga kelompok boleh mencoba lagi.';
+  document.getElementById('feedback').className='feedback';
+}
+function nextQuestion(){current++;loadQuestion()}
+function finish(){
+  document.getElementById('progress').style.width='100%';
+  score=Math.max(0,Math.min(100,score));
+  document.getElementById('finalScore').textContent=Math.max(...teamScores);
+
+  const highest=Math.max(...teamScores);
+  const winners=teamScores
+    .map((points,index)=>({name:'Kelompok '+(index+1),points,index}))
+    .filter(team=>team.points===highest);
+  const winnerBox=document.getElementById('winnerAnnouncement');
+  const scoreBoard=document.getElementById('teamFinalScores');
+
+  if(highest===0){
+    winnerBox.innerHTML='<span class="winner-emoji">👏</span><b>Terima kasih, semua kelompok!</b><span class="winner-message">Belum ada kelompok yang memperoleh poin. Tetap semangat dan terus berlatih, ya!</span>';
+  }else if(winners.length===1){
+    winnerBox.innerHTML='<span class="winner-emoji">🏆🎉</span><b>SELAMAT KEPADA PEMENANG!</b><span class="winner-names">'+winners[0].name+'</span><span class="winner-message">Hebat! Kalian meraih skor tertinggi, yaitu <b>'+highest+' poin</b>. Kerja sama dan semangat kalian luar biasa!</span>';
+  }else{
+    const names=winners.map(team=>team.name).join(' dan ');
+    winnerBox.innerHTML='<span class="winner-emoji">🏆🎉</span><b>SELAMAT KEPADA PARA PEMENANG!</b><span class="winner-names">'+names+'</span><span class="winner-message">Luar biasa! Kalian berbagi skor tertinggi, yaitu <b>'+highest+' poin</b>. Selamat atas kerja sama yang hebat!</span>';
+  }
+
+  scoreBoard.replaceChildren();
+  teamScores.forEach((points,index)=>{
+    const card=document.createElement('div');
+    card.className='team-final-score'+(points===highest && highest>0?' champion':'');
+    const name=document.createElement('strong');
+    name.textContent=(points===highest && highest>0?'🏆 ':'')+'Kelompok '+(index+1);
+    const total=document.createElement('span');
+    total.textContent=points+' poin';
+    card.append(name,total);
+    scoreBoard.appendChild(card);
+  });
+  show('win');
+}
+function restart(){
+  score=0;current=0;answered=false;teamScores=[0,0,0];questionWon=false;attemptedTeams=new Set();selectedTeamAnswers=[null,null,null];updateTeamScores();updateStats();
+  document.getElementById('openingFeedback').textContent='';
+  document.getElementById('openingAnswer').value='';
+  document.getElementById('practiceFeedback')?.replaceChildren();
+  resetDrops();
+  document.getElementById('mission3Progress')?.style.setProperty('width','0%');
+  document.getElementById('mission3Label')?.replaceChildren(document.createTextNode('Misi 3 • Tantangan 1 dari 8'));
+  show('home');
+}
+updateStats();
+if(document.getElementById('scoreTeam1')) updateTeamScores();
+setupCompositionInputs();
+</script>
+</body>
+</html>
